@@ -1,9 +1,11 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:sqflite/sqflite.dart' as sql;
 
 class SQLHelper {
   // fungsi membuat database
   static Future<void> createTables(sql.Database database) async {
-    await database.execute('''
+    await database.execute("""
 CREATE TABLE t_Membercard(
   kode_member INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   nama TEXT,
@@ -13,7 +15,7 @@ CREATE TABLE t_Membercard(
   username TEXT,
   password TEXT,
 )
-''');
+""");
   }
 
   static Future<sql.Database> db() async {
@@ -24,7 +26,7 @@ CREATE TABLE t_Membercard(
   }
 
   //tambah data
-  // ignore: non_constant_identifier_names
+  
   static Future<int> tambahDatamember(String nama, String tanggal_lahir, String alamat, String jenis_kelamin, String username, String password ) async {
     final db = await SQLHelper.db();
     final data = {'nama': nama,'tanggal_lahir': tanggal_lahir,'alamat': alamat,'jenis_kelamin': jenis_kelamin,'username': username, 'password': password};

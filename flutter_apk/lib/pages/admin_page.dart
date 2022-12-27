@@ -41,7 +41,7 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   //form tambah
-  void modalForm(int kode_member) async {
+  void modalForm() async {
     showModalBottomSheet(
       context: context,
       builder: (_) => Container(
@@ -94,7 +94,7 @@ class _AdminPageState extends State<AdminPage> {
             ),
             // Password
             TextField(
-              controller: namaController,
+              controller: passwordController,
               decoration: const InputDecoration(hintText: 'Password'),
             ),
             const SizedBox(
@@ -111,6 +111,7 @@ class _AdminPageState extends State<AdminPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(t_Membercard);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Admin Page'),
@@ -160,6 +161,13 @@ class _AdminPageState extends State<AdminPage> {
             ],
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          modalForm();
+        },
+        backgroundColor: Colors.green[700],
+        child: const Icon(Icons.group_add),
       ),
     );
   }
