@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({Key key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -59,6 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextField(
                       decoration: InputDecoration(
                         border: InputBorder.none,
+                        prefixIcon: Icon(Icons.person),
                         hintText: 'Username',
                       ),
                     ),
@@ -86,6 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: true,
                       decoration: InputDecoration(
                         border: InputBorder.none,
+                        prefixIcon: Icon(Icons.key),
                         hintText: 'Password',
                       ),
                     ),
