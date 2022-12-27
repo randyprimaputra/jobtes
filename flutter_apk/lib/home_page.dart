@@ -62,14 +62,14 @@ class _HomePageState extends State<HomePage> {
                       decoration:
                           const InputDecoration(hintText: 'Tanggal Lahir'),
                     ),
-                     const SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     TextField(
                       controller: alamatController,
                       decoration: const InputDecoration(hintText: 'Alamat'),
                     ),
-                     const SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     TextField(
@@ -77,26 +77,24 @@ class _HomePageState extends State<HomePage> {
                       decoration:
                           const InputDecoration(hintText: 'Jenis Kelamin'),
                     ),
-                     const SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     TextField(
                       controller: usernameController,
                       decoration: const InputDecoration(hintText: 'Username'),
                     ),
-                     const SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     TextField(
                       controller: passwordController,
                       decoration: const InputDecoration(hintText: 'Password'),
                     ),
-                     const SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    ElevatedButton(onPressed: () async{
-                      await tambahMembercard();
-                    },), child: const Text('tambah'))
+                    ElevatedButton(onPressed: (onPressed), child: child)
                   ],
                 ),
               ),
