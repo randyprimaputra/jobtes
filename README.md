@@ -4,9 +4,9 @@ make simple Apk admin  for Android with Flutter
 #task
 
 1. Buatlah Aplikasi Android dengan fungsi
-    - Login admin ke Aplikasi
-    - View data member
-    - Input data Membercard
+- Login admin ke Aplikasi
+- View data member
+- Input data Membercard
       data yang diinput
         - Kode_member > auto generate
         - Nama
