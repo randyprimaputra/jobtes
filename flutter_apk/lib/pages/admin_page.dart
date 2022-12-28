@@ -10,7 +10,7 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
-//All Membercards
+//All _membercards
   List<Map<String, dynamic>> _membercards = [];
 
   bool _isLoading = true;
