@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
     bool isValid = await login(username, password);
     if (isValid) {
       // Navigate to the appropriate page based on the user's role
-      if (username == 'Admin') {
+      if (username == 'Admin' && password == 'Admin') {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const AdminPage()));
       } else {
@@ -52,8 +52,8 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const MemberPage(
-                      userName: '',
+                builder: (context) => MemberPage(
+                      userName: password,
                     )));
       }
     } else {
