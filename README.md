@@ -1,5 +1,5 @@
 # jobtes
-make simple Apk admin  for Android with Flutter
+make Apk admin  for Android with Flutter
 
 #task
 
