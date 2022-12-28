@@ -197,8 +197,8 @@ class _AdminPageState extends State<AdminPage> {
                 color: Colors.orange[200],
                 margin: const EdgeInsets.all(15),
                 child: ListTile(
-                  title: Text(_membercards[index]['nama']),
-                  subtitle: Text(_membercards[index]['tanggal_lahir']),
+                  title: Text(_membercards[index]['username']),
+                  subtitle: Text(_membercards[index]['password']),
                   trailing: SizedBox(
                     width: 100,
                     child: Row(

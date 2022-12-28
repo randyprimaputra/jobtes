@@ -1,6 +1,5 @@
 // ignore_for_file: non_constant_identifier_names
 import 'package:flutter/foundation.dart';
-import 'package:flutter_apk/pages/member_model.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
 class SQLHelper {
@@ -58,13 +57,24 @@ class SQLHelper {
 
   // Read a single Membercard by kode_member
   static Future<List<Map<String, dynamic>>> getDatamembercard(
-      int kode_member) async {
+      var kode_member) async {
     final db = await SQLHelper.db();
     return db.query('Membercard',
         where: "kode_member = ?", whereArgs: [kode_member], limit: 1);
   }
 
   // login member
+
+  Future<bool> login(String username, String password) async {
+    final db = await SQLHelper.db();
+
+    // Query the database for a user with the specified username
+    List<Map<String, dynamic>> userData = await db.query('Membercard',
+        where: "username = ?", whereArgs: [username], limit: 1);
+
+    // Return true if the password matches the password in the database, false otherwise
+    return userData.isNotEmpty && password == userData[0]['password'];
+  }
 
   // Update a Membercard by kode_member
   static Future<int> updateDatamembercard(

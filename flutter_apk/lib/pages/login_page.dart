@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_apk/components/my_button.dart';
 import 'package:flutter_apk/components/my_textfield.dart';
 import 'package:flutter_apk/pages/admin_page.dart';
+import 'package:flutter_apk/pages/member_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../db/sql_helper.dart';
@@ -13,14 +14,68 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+// login member
+
+Future<bool> login(String username, String password) async {
+  final db = await SQLHelper.db();
+
+  // Query the database for a user with the specified username
+  List<Map<String, dynamic>> userData = await db.query('Membercard',
+      where: "username = ?", whereArgs: [username], limit: 1);
+
+  // Return true if the password matches the password in the database, false otherwise
+  return userData.isNotEmpty && password == userData[0]['password'];
+}
+
 class _LoginPageState extends State<LoginPage> {
   // text editing controllers
-  var _usernameController = TextEditingController();
+  final _usernameController = TextEditingController();
 
-  var _passwordController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   // Sign userAdmin in method
-  void signUserIn() {}
+  void signUserIn() async {
+    // Get the entered username and password
+    String username = _usernameController.text;
+    String password = _passwordController.text;
+
+    // Check the user's credentials
+    bool isValid = await login(username, password);
+    if (isValid) {
+      // Navigate to the appropriate page based on the user's role
+      if (username == 'Admin') {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const AdminPage()));
+      } else {
+        // Query the database for the user's data
+        // Navigate to the member page
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const MemberPage(
+                      userName: '',
+                    )));
+      }
+    } else {
+      // Display an error message
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Error"),
+              content: const Text("Incorrect username or password"),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text("OK"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
