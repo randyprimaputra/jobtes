@@ -1,18 +1,10 @@
 // ignore_for_file: non_constant_identifier_names
-
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
 class SQLHelper {
-  // fungsi membuat database
-static Future<void> createTables(sql.Database database) async {
-  // Check if the table already exists
-  final tables = await database.rawQuery('SELECT name FROM sqlite_master WHERE type = "table"');
-  final tableNames = tables.map((table) => table['name'] as String).toList();
-
-  // If the table does not exist, create it
-  if (!tableNames.contains('t_Membercard')) {
-    await database.execute("""
-      CREATE TABLE t_Membercard(
+  static Future<void> createTables(sql.Database database) async {
+    await database.execute("""CREATE TABLE Membercard(
         kode_member INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
         nama TEXT,
         tanggal_lahir TEXT,
@@ -20,33 +12,30 @@ static Future<void> createTables(sql.Database database) async {
         jenis_kelamin TEXT,
         username TEXT,
         password TEXT
-      );
-    """);
+      )
+      """);
   }
-}
 
   static Future<sql.Database> db() async {
-    return sql.openDatabase('testjob.db', version: 1,
-        onCreate: (sql.Database database, int version) async {
-      await createTables(database);
-    });
+    return sql.openDatabase(
+      'testjob.db',
+      version: 1,
+      onCreate: (sql.Database database, int version) async {
+        await createTables(database);
+      },
+    );
   }
 
   //tambah data
-
-static Future<int> tambahDatamember(
-    String nama,
-    String tanggal_lahir,
-    String alamat,
-    String jenis_kelamin,
-    String username,
-    String password) async {
-  try {
-    // Open the database and create the table if it does not exist
+  static Future<int> createMembercard(
+      String nama,
+      String tanggal_lahir,
+      String alamat,
+      String jenis_kelamin,
+      String username,
+      String password) async {
     final db = await SQLHelper.db();
-    await createTables(db);
 
-    // Insert the data into the table
     final data = {
       'nama': nama,
       'tanggal_lahir': tanggal_lahir,
@@ -55,16 +44,58 @@ static Future<int> tambahDatamember(
       'username': username,
       'password': password
     };
-    return await db.insert('t_Membercard', data);
-  } catch (e) {
-    print(e);
-    return 0;
+    final kode_member = await db.insert('Membercard', data,
+        conflictAlgorithm: sql.ConflictAlgorithm.replace);
+    return kode_member;
   }
-}
 
-  //ambil data
-  static Future<List<Map<String, dynamic>>> getDatamember() async {
+  // Read all Membercard
+  static Future<List<Map<String, dynamic>>> getDatamembercards() async {
     final db = await SQLHelper.db();
-    return db.query('t_Membercard');
+    return db.query('Membercard', orderBy: "kode_member");
+  }
+
+  // Read a single Membercard by kode_member
+  static Future<List<Map<String, dynamic>>> getDatamembercard(
+      int kode_member) async {
+    final db = await SQLHelper.db();
+    return db.query('Membercard',
+        where: "kode_member = ?", whereArgs: [kode_member], limit: 1);
+  }
+
+  // Update a Membercard by kode_member
+  static Future<int> updateDatamembercard(
+      int kode_member,
+      String nama,
+      String tanggal_lahir,
+      String alamat,
+      String jenis_kelamin,
+      String username,
+      String password) async {
+    final db = await SQLHelper.db();
+
+    final data = {
+      'nama': nama,
+      'tanggal_lahir': tanggal_lahir,
+      'alamat': alamat,
+      'jenis_kelamin': jenis_kelamin,
+      'username': username,
+      'password': password
+    };
+
+    final result = await db.update('Membercard', data,
+        where: "kode_member = ?", whereArgs: [kode_member]);
+    return result;
+  }
+
+  // Delete a Membercard by kode_member
+  static Future<void> deleteDatamembercard(int kode_member) async {
+    final db = await SQLHelper.db();
+    try {
+      await db.delete("Membercard",
+          where: "kode_member = ?", whereArgs: [kode_member]);
+    } catch (err) {
+      debugPrint("Something went wrong when deleting an item: $err");
+    }
   }
 }

@@ -8,7 +8,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
 //  const MyApp({super.key});
 
@@ -16,8 +16,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-     // home: LoginPage(),
-     home: AdminPage(),
+      // home: LoginPage(),
+      home: AdminPage(),
     );
   }
 }
