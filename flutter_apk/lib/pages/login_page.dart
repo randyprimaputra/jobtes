@@ -165,6 +165,15 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
+
+// temporary function hanya untuk bypass ke admin page ketika tidak memiliki admin account
+floatingActionButton: FloatingActionButton(
+        onPressed: (){Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const AdminPage()));},
+        backgroundColor: Colors.green[700],
+        child: const Icon(Icons.admin_panel_settings),
+      ),
+
     );
   }
 }
