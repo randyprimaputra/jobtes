@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_apk/components/my_button.dart';
 import 'package:flutter_apk/components/my_textfield.dart';
+import 'package:flutter_apk/pages/admin_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../db/sql_helper.dart';
+
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -12,36 +15,12 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   // text editing controllers
-  final _usernameController = TextEditingController();
+  var _usernameController = TextEditingController();
 
-  final _passwordController = TextEditingController();
+  var _passwordController = TextEditingController();
 
-  // Sign user in method
+  // Sign userAdmin in method
   void signUserIn() {}
-
-// wrong username message popup
-  void wrongUsernameMessage() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const AlertDialog(
-          title: Text('Incorrect Username'),
-        );
-      },
-    );
-  }
-
-  // wrong password message popup
-  void wrongpasswordMessage() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const AlertDialog(
-          title: Text('Incorrect Password'),
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

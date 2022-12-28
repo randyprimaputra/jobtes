@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_apk/pages/admin_page.dart';
-import 'package:flutter_apk/pages/auth_page.dart';
-import 'package:flutter_apk/pages/login_page.dart';
 
 //import 'login_page.dart';
 
@@ -16,9 +14,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: AdminPage(),
     );
   }
 }

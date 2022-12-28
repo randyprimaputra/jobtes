@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 import 'package:flutter/foundation.dart';
+import 'package:flutter_apk/pages/member_model.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 
 class SQLHelper {
@@ -62,6 +63,8 @@ class SQLHelper {
     return db.query('Membercard',
         where: "kode_member = ?", whereArgs: [kode_member], limit: 1);
   }
+
+  // login member
 
   // Update a Membercard by kode_member
   static Future<int> updateDatamembercard(

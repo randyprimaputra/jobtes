@@ -57,7 +57,7 @@ class _AdminPageState extends State<AdminPage> {
 
     showModalBottomSheet(
         context: context,
-        elevation: 5,
+        elevation: 1,
         isScrollControlled: true,
         builder: (_) => Container(
               padding: EdgeInsets.only(
@@ -73,7 +73,9 @@ class _AdminPageState extends State<AdminPage> {
                 children: [
                   TextField(
                     controller: _namaController,
-                    decoration: const InputDecoration(hintText: 'Nama'),
+                    decoration: const InputDecoration(
+                      hintText: 'Nama',
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
