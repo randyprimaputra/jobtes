@@ -57,8 +57,8 @@ class _AdminPageState extends State<AdminPage> {
 
     showModalBottomSheet(
         context: context,
-        elevation: 1,
-        isScrollControlled: true,
+        elevation: 100,
+        isScrollControlled: false,
         builder: (_) => Container(
               padding: EdgeInsets.only(
                 top: 15,
@@ -69,7 +69,7 @@ class _AdminPageState extends State<AdminPage> {
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   TextField(
                     controller: _namaController,

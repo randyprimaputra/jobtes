@@ -10,6 +10,7 @@ class MemberPage extends StatelessWidget {
       // Add your member page content here
       body: Center(
         child: Text('Welcome, $userName'),
+        
       ),
     );
   }

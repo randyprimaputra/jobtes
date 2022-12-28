@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_apk/components/my_button.dart';
 import 'package:flutter_apk/components/my_textfield.dart';
 import 'package:flutter_apk/pages/admin_page.dart';
+import 'package:flutter_apk/pages/adminlogin_page.dart';
 import 'package:flutter_apk/pages/member_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -53,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
             context,
             MaterialPageRoute(
                 builder: (context) => MemberPage(
-                      userName: password,
+                      userName: username,
                     )));
       }
     } else {
@@ -166,10 +167,10 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
 
-// temporary function hanya untuk bypass ke admin page ketika tidak memiliki admin account
+// function untuk masuk ke admin page ketika tidak memiliki akun admin
 floatingActionButton: FloatingActionButton(
         onPressed: (){Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const AdminPage()));},
+            MaterialPageRoute(builder: (context) => const AdminLoginPage()));},
         backgroundColor: Colors.green[700],
         child: const Icon(Icons.admin_panel_settings),
       ),
