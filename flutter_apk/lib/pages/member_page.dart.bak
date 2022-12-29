@@ -1,0 +1,110 @@
+// ignore_for_file: unnecessary_string_interpolations, non_constant_identifier_names, unused_local_variable, unused_element, avoid_unnecessary_containers, unused_field
+
+//! masih error untuk mengambil data member sesuai login selain username
+//! masih error untuk mengannti password member sesuai login
+
+import 'package:flutter/material.dart';
+
+import '../db/sql_helper.dart';
+
+class MemberPage extends StatefulWidget {
+  final String username;
+
+  const MemberPage({super.key, required this.username});
+
+  @override
+  State<MemberPage> createState() => _MemberPageState();
+}
+
+// Declare a list of maps that will hold the data from the database
+List<Map<String, dynamic>> memberData;
+
+// Fetch the data from the database
+memberData = await SQLHelper.getDatamembercard(kode_member);
+
+// Assign the values from the database to the controllers
+_namaController.text = memberData[0]['nama'];
+_tanggal_lahirController.text = memberData[0]['tanggal_lahir'];
+_alamatController.text = memberData[0]['alamat'];
+_jenis_kelaminController.text = memberData[0]['jenis_kelamin'];
+_usernameController.text = memberData[0]['username'];
+_passwordController.text = memberData[0]['password'];
+
+class _MemberPageState extends State<MemberPage> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.green,
+      appBar: AppBar(
+        title: const Text('Member Page'),
+        backgroundColor: Colors.green.shade700,
+      ),
+      // Add your member page content here
+
+      body: Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            const TextField(
+              controller: _namaController,
+              decoration: InputDecoration(
+                labelText: 'Kode Member',
+                prefixIcon: Icon(Icons.info_rounded),
+              ),
+              init
+              
+               initialValue: _namaController.text,
+            ),
+            const TextField(
+              decoration: InputDecoration(
+                labelText: 'Nama',
+                prefixIcon: Icon(Icons.person),
+              ),
+              initialValue: 'name',
+            ),
+            const TextField(
+              decoration: InputDecoration(
+                labelText: 'Tanggal lahir',
+                prefixIcon: Icon(Icons.date_range),
+              ),
+              initialValue: 'tanggal_lahir',
+            ),
+            const TextField(
+              decoration: InputDecoration(
+                labelText: 'Alamat',
+                prefixIcon: Icon(Icons.location_city),
+              ),
+              initialValue: 'alamat',
+            ),
+            const TextField(
+              decoration: InputDecoration(
+                labelText: 'Jenis Kelamin',
+                prefixIcon: Icon(Icons.girl_outlined),
+              ),
+              initialValue: 'jenis_kelamin',
+            ),
+            TextField(
+              decoration: const InputDecoration(
+                labelText: 'Username',
+                prefixIcon: Icon(Icons.key),
+              ),
+              initialValue: '${widget.username}',
+            ),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Password',
+                prefixIcon: const Icon(Icons.password),
+                suffixIcon: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.edit),
+                ),
+              ),
+              initialValue: 'password',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

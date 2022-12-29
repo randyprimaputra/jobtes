@@ -26,7 +26,7 @@ class SQLHelper {
     );
   }
 
-  //tambah data
+  //
   static Future<int> createMembercard(
       String nama,
       String tanggal_lahir,
@@ -88,15 +88,12 @@ class SQLHelper {
     return result;
   }
 
-    // Update a Membercard password by kode_member
+  // Update a Membercard password by kode_member
   static Future<int> updatePasswordmembercard(
-      int kode_member,
-      String password) async {
+      int kode_member, String password) async {
     final db = await SQLHelper.db();
 
-    final data = {
-      'password': password
-    };
+    final data = {'password': password};
 
     final result = await db.update('Membercard', data,
         where: "kode_member = ?", whereArgs: [kode_member]);

@@ -40,7 +40,7 @@ class _AdminPageState extends State<AdminPage> {
       TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  //String? _jenisKelamin;
+
   // This function will be triggered when the floating button is pressed
   // It will also be triggered when want to update a Membercard
   void _showForm(int? kode_member) async {
@@ -55,7 +55,6 @@ class _AdminPageState extends State<AdminPage> {
       _jenis_kelaminController.text = existingMembercard['jenis_kelamin'];
       _usernameController.text = existingMembercard['username'];
       _passwordController.text = existingMembercard['password'];
-     // _jenisKelamin = existingMembercard['jenis_kelamin'];
     }
 
     showModalBottomSheet(
@@ -99,27 +98,10 @@ class _AdminPageState extends State<AdminPage> {
             const SizedBox(
               height: 10,
             ),
-            
             TextField(
               controller: _jenis_kelaminController,
               decoration: const InputDecoration(hintText: 'Jenis Kelamin'),
             ),
-/* Jenis Kelamin Dropdown masih error
-            DropdownButtonFormField(
-              value: _jenisKelamin,
-              decoration: const InputDecoration(hintText: 'Jenis Kelamin'),
-              items: ['Laki-laki', 'Perempuan']
-                  .map((value) => DropdownMenuItem(
-                        value: value,
-                        child: Text(value),
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                setState(() {
-                  _jenisKelamin = value as String?;
-                });
-              },
-            ), */
             const SizedBox(
               height: 10,
             ),
@@ -204,9 +186,7 @@ class _AdminPageState extends State<AdminPage> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     } else {
       return Scaffold(
         resizeToAvoidBottomInset: false,
