@@ -63,19 +63,6 @@ class SQLHelper {
         where: "kode_member = ?", whereArgs: [kode_member], limit: 1);
   }
 
-  // login member
-
-  Future<bool> login(String username, String password) async {
-    final db = await SQLHelper.db();
-
-    // Query the database for a user with the specified username
-    List<Map<String, dynamic>> userData = await db.query('Membercard',
-        where: "username = ?", whereArgs: [username], limit: 1);
-
-    // Return true if the password matches the password in the database, false otherwise
-    return userData.isNotEmpty && password == userData[0]['password'];
-  }
-
   // Update a Membercard by kode_member
   static Future<int> updateDatamembercard(
       int kode_member,

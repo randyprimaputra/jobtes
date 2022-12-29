@@ -47,21 +47,21 @@ class _AdminPageState extends State<AdminPage> {
       // kode_member != null -> update an existing item
       final existingMembercard = _membercards
           .firstWhere((element) => element['kode_member'] == kode_member);
-      _namaController.text = existingMembercard['nama'] ?? '';
-      _tanggal_lahirController.text = existingMembercard['tanggal_lahir'] ?? '';
-      _alamatController.text = existingMembercard['alamat'] ?? '';
-      _jenis_kelaminController.text = existingMembercard['jenis_kelamin'] ?? '';
-      _usernameController.text = existingMembercard['username'] ?? '';
-      _passwordController.text = existingMembercard['password'] ?? '';
+      _namaController.text = existingMembercard['nama'];
+      _tanggal_lahirController.text = existingMembercard['tanggal_lahir'];
+      _alamatController.text = existingMembercard['alamat'] ;
+      _jenis_kelaminController.text = existingMembercard['jenis_kelamin'];
+      _usernameController.text = existingMembercard['username'] ;
+      _passwordController.text = existingMembercard['password'] ;
     }
 
     showModalBottomSheet(
         context: context,
-        elevation: 100,
-        isScrollControlled: false,
+        elevation: 1,
+        isScrollControlled: true,
         builder: (_) => Container(
               padding: EdgeInsets.only(
-                top: 15,
+                top: 60,
                 left: 15,
                 right: 15,
                 // this will prevent the soft keyboard from covering the text fields
@@ -69,7 +69,7 @@ class _AdminPageState extends State<AdminPage> {
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   TextField(
                     controller: _namaController,
@@ -196,7 +196,7 @@ class _AdminPageState extends State<AdminPage> {
               itemBuilder: (context, index) => Card(
                 color: Colors.orange[200],
                 margin: const EdgeInsets.all(15),
-                child: ListTile(
+                child:  ListTile(
                   title: Text(_membercards[index]['username']),
                   subtitle: Text(_membercards[index]['password']),
                   trailing: SizedBox(
