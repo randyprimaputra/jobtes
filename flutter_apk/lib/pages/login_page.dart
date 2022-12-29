@@ -28,7 +28,7 @@ Future<bool> loginData(String username, String password) async {
   return userData.isNotEmpty && password == userData[0]['password'];
 }
 
-/*
+
 Future<bool> login(String username, String password) async {
   final db = await SQLHelper.db();
 
@@ -38,7 +38,7 @@ Future<bool> login(String username, String password) async {
 
   // Return true if the password matches the password in the database, false otherwise
   return userData.isNotEmpty && password == userData[0]['password'];
-} */
+} 
 
 class _LoginPageState extends State<LoginPage> {
   // text editing controllers
@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
             context,
             MaterialPageRoute(
                 builder: (context) => MemberPage(
-                      userName: username,
+                      username: username,
                     )));
       }
     } else {

@@ -88,6 +88,21 @@ class SQLHelper {
     return result;
   }
 
+    // Update a Membercard password by kode_member
+  static Future<int> updatePasswordmembercard(
+      int kode_member,
+      String password) async {
+    final db = await SQLHelper.db();
+
+    final data = {
+      'password': password
+    };
+
+    final result = await db.update('Membercard', data,
+        where: "kode_member = ?", whereArgs: [kode_member]);
+    return result;
+  }
+
   // Delete a Membercard by kode_member
   static Future<void> deleteDatamembercard(int kode_member) async {
     final db = await SQLHelper.db();
