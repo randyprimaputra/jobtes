@@ -15,22 +15,40 @@ class MemberPage extends StatefulWidget {
 
 
 class _MemberPageState extends State<MemberPage> {
+
+  List<Map<String, dynamic>> _membercard = [];
+
+   bool _isLoading = true;
   
   // This function is used to fetch all data from the database
   void _refreshDatamembercard() async {
     final data = await SQLHelper.getDatamembercard();
     if (mounted) {
       setState(() {
-        _membercards = data;
+        _membercard = data;
         _isLoading = false;
       });
     }
   }
+    @override
+  void initState() {
+    super.initState();
+    _refreshDatamembercard(); // Loading the data when the page starts
+  }
+  
 
   @override
   void initState() {
     super.initState();
     _refreshDatamembercard(); // Loading the data when the page starts
+  }
+
+      // Update an existing password Membercard by kode_member
+  Future<void> _updateDataPasswordmembercard(int kode_member) async {
+    await SQLHelper.updatePasswordmembercard(
+        kode_member,
+        _passwordController.text);
+        _refreshDatamembercard();
   }
 
       Future<void> fetchMemberData(String name, tanggal_lahir, alamat, jenis_kelamin, username, password) async {
@@ -54,7 +72,12 @@ class _MemberPageState extends State<MemberPage> {
     @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
+    if (_isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      return Scaffold(
       backgroundColor: Colors.green,
       appBar: AppBar(
         title: const Text('Member Page'),
@@ -113,15 +136,8 @@ class _MemberPageState extends State<MemberPage> {
         ),
       ),
     );
-  }
-    // Update an existing password Membercard by kode_member
-  Future<void> _updateDataPasswordmembercard(int kode_member) async {
-    await SQLHelper.updatePasswordmembercard(
-        kode_member,
-        _passwordController.text);
-        _refreshDatamembercard();
-  }
-  
+  } 
+}
 }
 
 
