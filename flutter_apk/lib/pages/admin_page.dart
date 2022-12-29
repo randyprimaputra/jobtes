@@ -18,10 +18,12 @@ class _AdminPageState extends State<AdminPage> {
 // This function is used to fetch all data from the database
   void _refreshDatamembercards() async {
     final data = await SQLHelper.getDatamembercards();
-    setState(() {
-      _membercards = data;
-      _isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        _membercards = data;
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -49,101 +51,100 @@ class _AdminPageState extends State<AdminPage> {
           .firstWhere((element) => element['kode_member'] == kode_member);
       _namaController.text = existingMembercard['nama'];
       _tanggal_lahirController.text = existingMembercard['tanggal_lahir'];
-      _alamatController.text = existingMembercard['alamat'] ;
+      _alamatController.text = existingMembercard['alamat'];
       _jenis_kelaminController.text = existingMembercard['jenis_kelamin'];
-      _usernameController.text = existingMembercard['username'] ;
-      _passwordController.text = existingMembercard['password'] ;
+      _usernameController.text = existingMembercard['username'];
+      _passwordController.text = existingMembercard['password'];
     }
 
     showModalBottomSheet(
-        context: context,
-        elevation: 1,
-        isScrollControlled: true,
-        builder: (_) => Container(
-              padding: EdgeInsets.only(
-                top: 60,
-                left: 15,
-                right: 15,
-                // this will prevent the soft keyboard from covering the text fields
-                bottom: MediaQuery.of(context).viewInsets.bottom + 120,
+      context: context,
+      elevation: 1,
+      isScrollControlled: true,
+      builder: (_) => Container(
+        padding: EdgeInsets.only(
+          top: 60,
+          left: 15,
+          right: 15,
+          // this will prevent the soft keyboard from covering the text fields
+          bottom: MediaQuery.of(context).viewInsets.bottom + 0,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            TextField(
+              controller: _namaController,
+              decoration: const InputDecoration(
+                hintText: 'Nama',
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  TextField(
-                    controller: _namaController,
-                    decoration: const InputDecoration(
-                      hintText: 'Nama',
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    controller: _tanggal_lahirController,
-                    decoration:
-                        const InputDecoration(hintText: 'Tanggal Lahir'),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    controller: _alamatController,
-                    decoration: const InputDecoration(hintText: 'Alamat'),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    controller: _jenis_kelaminController,
-                    decoration:
-                        const InputDecoration(hintText: 'Jenis Kelamin'),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    controller: _usernameController,
-                    decoration: const InputDecoration(hintText: 'Username'),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(hintText: 'Password'),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      // Save new journal
-                      if (kode_member == null) {
-                        await _addDatamembercard();
-                      }
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextField(
+              controller: _tanggal_lahirController,
+              decoration: const InputDecoration(hintText: 'Tanggal Lahir'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextField(
+              controller: _alamatController,
+              decoration: const InputDecoration(hintText: 'Alamat'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextField(
+              controller: _jenis_kelaminController,
+              decoration: const InputDecoration(hintText: 'Jenis Kelamin'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextField(
+              controller: _usernameController,
+              decoration: const InputDecoration(hintText: 'Username'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextField(
+              controller: _passwordController,
+              decoration: const InputDecoration(hintText: 'Password'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                // Save new Membercard
+                if (kode_member == null) {
+                  await _addDatamembercard();
+                }
 
-                      if (kode_member != null) {
-                        await _updateDatamembercard(kode_member);
-                      }
+                if (kode_member != null) {
+                  await _updateDatamembercard(kode_member);
+                }
 
-                      // Clear the text fields
-                      _namaController.text = '';
-                      _tanggal_lahirController.text = '';
-                      _alamatController.text = '';
-                      _jenis_kelaminController.text = '';
-                      _usernameController.text = '';
-                      _passwordController.text = '';
+                // Clear the text fields
+                _namaController.text = '';
+                _tanggal_lahirController.text = '';
+                _alamatController.text = '';
+                _jenis_kelaminController.text = '';
+                _usernameController.text = '';
+                _passwordController.text = '';
 
-                      // Close the bottom sheet
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(kode_member == null ? 'Create New' : 'Update'),
-                  )
-                ],
-              ),
-            ));
+                // Close the bottom sheet
+                Navigator.of(context).pop();
+              },
+              child: Text(kode_member == null ? 'Create New' : 'Update'),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   // Insert a new Membercard to the database
@@ -182,48 +183,52 @@ class _AdminPageState extends State<AdminPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Admin Page'),
-        backgroundColor: Colors.green[800],
-      ),
-      backgroundColor: Colors.green,
-      body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : ListView.builder(
-              itemBuilder: (context, index) => Card(
-                color: Colors.orange[200],
-                margin: const EdgeInsets.all(15),
-                child:  ListTile(
-                  title: Text(_membercards[index]['username']),
-                  subtitle: Text(_membercards[index]['password']),
-                  trailing: SizedBox(
-                    width: 100,
-                    child: Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () =>
-                              _showForm(_membercards[index]['kode_member']),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete),
-                          onPressed: () => _deleteDatamembercard(
-                              _membercards[index]['kode_member']),
-                        ),
-                      ],
+    if (_isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      return Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: const Text('Admin Page'),
+          backgroundColor: Colors.green[800],
+        ),
+        backgroundColor: Colors.green,
+        body: ListView.builder(
+          itemCount: _membercards.length,
+          itemBuilder: (context, index) => Card(
+            color: Colors.orange[200],
+            margin: const EdgeInsets.all(15),
+            child: ListTile(
+              title: Text(_membercards[index]['username']),
+              subtitle: Text(_membercards[index]['password']),
+              trailing: SizedBox(
+                width: 100,
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () =>
+                          _showForm(_membercards[index]['kode_member']),
                     ),
-                  ),
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () => _deleteDatamembercard(
+                          _membercards[index]['kode_member']),
+                    ),
+                  ],
                 ),
               ),
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showForm(null),
-        backgroundColor: Colors.green[700],
-        child: const Icon(Icons.group_add),
-      ),
-    );
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => _showForm(null),
+          backgroundColor: Colors.green[700],
+          child: const Icon(Icons.group_add),
+        ),
+      );
+    }
   }
 }
