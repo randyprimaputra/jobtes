@@ -17,17 +17,16 @@ class LoginPage extends StatefulWidget {
 
 // login member
 
-   Future<bool> loginData(String username, String password) async {
-    final db = await SQLHelper.db();
+Future<bool> loginData(String username, String password) async {
+  final db = await SQLHelper.db();
 
-    // Query the database for a user with the specified username
-    List<Map<String, dynamic>> userData = await db.query('Membercard',
-        where: "username = ?", whereArgs: [username], limit: 1);
+  // Query the database for a user with the specified username
+  List<Map<String, dynamic>> userData = await db.query('Membercard',
+      where: "username = ?", whereArgs: [username], limit: 1);
 
-    // Return true if the password matches the password in the database, false otherwise
-    return userData.isNotEmpty && password == userData[0]['password'];
-  } 
-
+  // Return true if the password matches the password in the database, false otherwise
+  return userData.isNotEmpty && password == userData[0]['password'];
+}
 
 /*
 Future<bool> login(String username, String password) async {
@@ -181,13 +180,14 @@ class _LoginPageState extends State<LoginPage> {
       ),
 
 // function untuk masuk ke admin page ketika tidak memiliki akun admin
-floatingActionButton: FloatingActionButton(
-        onPressed: (){Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const AdminLoginPage()));},
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const AdminLoginPage()));
+        },
         backgroundColor: Colors.green[700],
         child: const Icon(Icons.admin_panel_settings),
       ),
-
     );
   }
 }

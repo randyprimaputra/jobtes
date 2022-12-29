@@ -40,7 +40,7 @@ class _AdminPageState extends State<AdminPage> {
       TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
+  String? _jenisKelamin;
   // This function will be triggered when the floating button is pressed
   // It will also be triggered when want to update a Membercard
   void _showForm(int? kode_member) async {
@@ -55,6 +55,7 @@ class _AdminPageState extends State<AdminPage> {
       _jenis_kelaminController.text = existingMembercard['jenis_kelamin'];
       _usernameController.text = existingMembercard['username'];
       _passwordController.text = existingMembercard['password'];
+      _jenisKelamin = existingMembercard['jenis_kelamin'];
     }
 
     showModalBottomSheet(
@@ -67,7 +68,9 @@ class _AdminPageState extends State<AdminPage> {
           left: 15,
           right: 15,
           // this will prevent the soft keyboard from covering the text fields
-          bottom: MediaQuery.of(context).viewInsets.bottom + 0,
+          bottom: MediaQuery.of(context).viewInsets.bottom != 0
+              ? MediaQuery.of(context).viewInsets.bottom
+              : 120,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -96,9 +99,26 @@ class _AdminPageState extends State<AdminPage> {
             const SizedBox(
               height: 10,
             ),
+            /*
             TextField(
               controller: _jenis_kelaminController,
               decoration: const InputDecoration(hintText: 'Jenis Kelamin'),
+            ), */
+
+            DropdownButtonFormField(
+              value: _jenisKelamin,
+              decoration: const InputDecoration(hintText: 'Jenis Kelamin'),
+              items: ['Laki-laki', 'Perempuan']
+                  .map((value) => DropdownMenuItem(
+                        value: value,
+                        child: Text(value),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  _jenisKelamin = value as String?;
+                });
+              },
             ),
             const SizedBox(
               height: 10,
@@ -132,7 +152,7 @@ class _AdminPageState extends State<AdminPage> {
                 _namaController.text = '';
                 _tanggal_lahirController.text = '';
                 _alamatController.text = '';
-                _jenis_kelaminController.text = '';
+                _jenisKelamin = '';
                 _usernameController.text = '';
                 _passwordController.text = '';
 
@@ -153,7 +173,7 @@ class _AdminPageState extends State<AdminPage> {
         _namaController.text,
         _tanggal_lahirController.text,
         _alamatController.text,
-        _jenis_kelaminController.text,
+        _jenisKelamin!,
         _usernameController.text,
         _passwordController.text);
     _refreshDatamembercards();
@@ -166,7 +186,7 @@ class _AdminPageState extends State<AdminPage> {
         _namaController.text,
         _tanggal_lahirController.text,
         _alamatController.text,
-        _jenis_kelaminController.text,
+        _jenisKelamin!,
         _usernameController.text,
         _passwordController.text);
     _refreshDatamembercards();
@@ -201,7 +221,7 @@ class _AdminPageState extends State<AdminPage> {
             color: Colors.orange[200],
             margin: const EdgeInsets.all(15),
             child: ListTile(
-              title: Text(_membercards[index]['username']),
+              title: Text(_membercards[index]['nama']),
               subtitle: Text(_membercards[index]['password']),
               trailing: SizedBox(
                 width: 100,
