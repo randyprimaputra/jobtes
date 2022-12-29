@@ -14,8 +14,6 @@ class MemberPage extends StatefulWidget {
 }
 
 
-
-
 class _MemberPageState extends State<MemberPage> {
   
   // This function is used to fetch all data from the database
@@ -32,7 +30,7 @@ class _MemberPageState extends State<MemberPage> {
   @override
   void initState() {
     super.initState();
-    _refreshDatamembercards(); // Loading the data when the page starts
+    _refreshDatamembercard(); // Loading the data when the page starts
   }
 
       Future<void> fetchMemberData(String name, tanggal_lahir, alamat, jenis_kelamin, username, password) async {
@@ -116,13 +114,14 @@ class _MemberPageState extends State<MemberPage> {
       ),
     );
   }
-  
-}
-
-  // Update an existing password Membercard by kode_member
+    // Update an existing password Membercard by kode_member
   Future<void> _updateDataPasswordmembercard(int kode_member) async {
     await SQLHelper.updatePasswordmembercard(
         kode_member,
         _passwordController.text);
-        _refreshDatamembercards();
+        _refreshDatamembercard();
   }
+  
+}
+
+

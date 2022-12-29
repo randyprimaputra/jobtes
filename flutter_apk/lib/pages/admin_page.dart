@@ -36,7 +36,7 @@ class _AdminPageState extends State<AdminPage> {
   final TextEditingController _tanggal_lahirController =
       TextEditingController();
   final TextEditingController _alamatController = TextEditingController();
-  final TextEditingController _jenis_kelaminController =
+  TextEditingController jenis_kelaminController =
       TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -52,11 +52,13 @@ class _AdminPageState extends State<AdminPage> {
       _namaController.text = existingMembercard['nama'];
       _tanggal_lahirController.text = existingMembercard['tanggal_lahir'];
       _alamatController.text = existingMembercard['alamat'];
-      _jenis_kelaminController.text = existingMembercard['jenis_kelamin'];
+      jenis_kelaminController.text = existingMembercard['jenis_kelamin'];
       _usernameController.text = existingMembercard['username'];
       _passwordController.text = existingMembercard['password'];
-     // _jenisKelamin = existingMembercard['jenis_kelamin'];
+     
     }
+
+    
 
     showModalBottomSheet(
       context: context,
@@ -99,14 +101,14 @@ class _AdminPageState extends State<AdminPage> {
             const SizedBox(
               height: 10,
             ),
-            
+            /*
             TextField(
               controller: _jenis_kelaminController,
               decoration: const InputDecoration(hintText: 'Jenis Kelamin'),
             ),
-/* Jenis Kelamin Dropdown masih error
+*/
             DropdownButtonFormField(
-              value: _jenisKelamin,
+              value: jenis_kelaminController,
               decoration: const InputDecoration(hintText: 'Jenis Kelamin'),
               items: ['Laki-laki', 'Perempuan']
                   .map((value) => DropdownMenuItem(
@@ -116,10 +118,10 @@ class _AdminPageState extends State<AdminPage> {
                   .toList(),
               onChanged: (value) {
                 setState(() {
-                  _jenisKelamin = value as String?;
+                  jenis_kelaminController;
                 });
               },
-            ), */
+            ), 
             const SizedBox(
               height: 10,
             ),
@@ -152,7 +154,7 @@ class _AdminPageState extends State<AdminPage> {
                 _namaController.text = '';
                 _tanggal_lahirController.text = '';
                 _alamatController.text = '';
-                _jenis_kelaminController.text = '';
+                jenis_kelaminController.text = '';
                 _usernameController.text = '';
                 _passwordController.text = '';
 
@@ -173,7 +175,7 @@ class _AdminPageState extends State<AdminPage> {
         _namaController.text,
         _tanggal_lahirController.text,
         _alamatController.text,
-        _jenis_kelaminController.text,
+        jenis_kelaminController.text,
         _usernameController.text,
         _passwordController.text);
     _refreshDatamembercards();
@@ -186,7 +188,7 @@ class _AdminPageState extends State<AdminPage> {
         _namaController.text,
         _tanggal_lahirController.text,
         _alamatController.text,
-        _jenis_kelaminController.text,
+        jenis_kelaminController.text,
         _usernameController.text,
         _passwordController.text);
     _refreshDatamembercards();
