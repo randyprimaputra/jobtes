@@ -1,16 +1,25 @@
-# flutter_apk
+# [Flutter] RandyPrimaPutra
 
-A new Flutter project.
+Flutter project jobtest
 
-## Getting Started
+Using Flutter Environtment sdk: '>=2.17.0 <3.0.0' Null Safety
 
-This project is a starting point for a Flutter application.
+Packages : 
 
-A few resources to get you started if this is your first Flutter project:
+ - sqlflite ^2.2.2, 
+ - path: ^1.8.2, 
+ - google_fonts: ^3.0.1
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+IDE : Intellij IDEA Comunity Edition
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Text Editor : VS Code
+
+Run Device Emulator : 
+
+- Pixel 4 and 6/Pro 
+- API 22, 28 and 30. 
+- Screen size 5.7", 6.4" and 6.7"
+
+
+
+
