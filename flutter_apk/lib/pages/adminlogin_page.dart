@@ -13,7 +13,6 @@ class AdminLoginPage extends StatefulWidget {
 
 // admin
 
-
 class _LoginPageState extends State<AdminLoginPage> {
   // text editing controllers
   final _passwordController = TextEditingController();
@@ -23,10 +22,10 @@ class _LoginPageState extends State<AdminLoginPage> {
     // Get the  password
     String password = _passwordController.text;
 
-      // Navigate to Admin Page with password match
-      if (password == 'ADMIN') {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const AdminPage()));
+    // Navigate to Admin Page with password match
+    if (password == 'ADMIN') {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const AdminPage()));
     } else {
       // Display an error message
       showDialog(
@@ -52,6 +51,7 @@ class _LoginPageState extends State<AdminLoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green[700],
         title: const Text('Admin Login Page'),
       ),
       backgroundColor: Colors.green,
@@ -107,7 +107,6 @@ class _LoginPageState extends State<AdminLoginPage> {
           ),
         ),
       ),
-
     );
   }
 }
