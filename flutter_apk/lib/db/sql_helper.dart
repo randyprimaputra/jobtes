@@ -56,12 +56,21 @@ static Future<void> createTables(sql.Database database) async {
   }
 
   // Read a single Membercard by kode_member
-  static Future<List<Map<String, dynamic>>> getDatamembercard(
+  static Future<List<Map<String, dynamic>>> getUsermembercard(
       var kode_member) async {
     final db = await SQLHelper.db();
     return db.query('Membercard',
         where: "kode_member = ?", whereArgs: [kode_member], limit: 1);
   }
+
+  static Future<List<Map<String, dynamic>>> getUserLoginmembercard(
+    String username, String password) async {
+  final db = await SQLHelper.db();
+  return db.query('Membercard',
+      where: "username = ? AND password = ?", whereArgs: [username, password], limit: 1);
+}
+
+  
 
   // Update a Membercard by kode_member
   static Future<int> updateDatamembercard(
