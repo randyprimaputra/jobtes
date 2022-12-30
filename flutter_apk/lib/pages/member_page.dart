@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../db/sql_helper.dart';
 
 class MemberPage extends StatefulWidget {
+
   final String username;
 
   const MemberPage({super.key, required this.username});
@@ -16,44 +17,11 @@ class MemberPage extends StatefulWidget {
 
 class _MemberPageState extends State<MemberPage> {
 
-  Future<bool> loginData(String username, String password) async {
-  final db = await SQLHelper.db();
-
-  // Query the database for a user with the specified username
-  List<Map<String, dynamic>> userData = await db.query('Membercard',
-      where: "username = ?", whereArgs: [username], limit: 1);
-
-  // Return true if the password matches the password in the database, false otherwise
-  return userData.isNotEmpty && password == userData[0]['password'];
-}
-
-Future<bool> login(String username, String password) async {
-  final db = await SQLHelper.db();
-
-  // Query the database for a user with the specified username
-  List<Map<String, dynamic>> userData = await db.query('Membercard',
-      where: "username = ?", whereArgs: [username], limit: 1);
-
-  // Return true if the password matches the password in the database, false otherwise
-  return userData.isNotEmpty && password == userData[0]['password'];
-} 
 
    bool _isLoading = true;
    var kode_member;
-
-
-  final TextEditingController _passwordController = TextEditingController();
   
   // This function is used to fetch all data from the database
-  void _refreshDatamembercard() async {
-    var data = await SQLHelper.getDatamembercard();
-    if (mounted) {
-      setState(() {
-         userData = data;
-        _isLoading = false;
-      });
-    }
-  }
 
     final TextEditingController _namaController = TextEditingController();
   final TextEditingController _tanggal_lahirController =
@@ -64,18 +32,21 @@ Future<bool> login(String username, String password) async {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-   final existingMembercard = _membercards
-          .firstWhere((element) => element['kode_member'] == kode_member);
-      _namaController.text = existingMembercard['nama'];
-      _tanggal_lahirController.text = existingMembercard['tanggal_lahir'];
-      _alamatController.text = existingMembercard['alamat'];
-      jenis_kelaminController.text = existingMembercard['jenis_kelamin'];
-      _usernameController.text = existingMembercard['username'];
-      _passwordController.text = existingMembercard['password'];
   @override
   void initState() {
     super.initState();
     _refreshDatamembercard(); // Loading the data when the page starts
+  }
+
+  // This function is used to fetch data from the database
+  void _refreshDatamembercard() async {
+    final data = await SQLHelper.getDatamembercard();
+    if (mounted) {
+      setState(() {
+        membercard = data;
+        _isLoading = false;
+      });
+    }
   }
   
       // Update an existing password Membercard by kode_member
