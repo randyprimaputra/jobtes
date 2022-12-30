@@ -22,7 +22,7 @@ Future<bool> loginData(String username, String password) async {
 
   // Query the database for a user with the specified username
   List<Map<String, dynamic>> userData = await db.query('Membercard',
-      where: "username = ?", whereArgs: [username], limit: 1);
+      where: "username = ? AND password = ?", whereArgs: [username], limit: 1);
 
   // Return true if the password matches the password in the database, false otherwise
   return userData.isNotEmpty && password == userData[0]['password'];
@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
             context,
             MaterialPageRoute(
                 builder: (context) => MemberPage(
-                      username: username,
+                      userName: username, passWord: : password,
                     )));
       }
     } else {
