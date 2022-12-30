@@ -1,6 +1,10 @@
 // ignore_for_file: non_constant_identifier_names
+
+import 'package:flutter_apk/model/membercard_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart' as sql;
+
+import '../pages/member_page.dart';
 
 class SQLHelper {
 static Future<void> createTables(sql.Database database) async {
@@ -49,11 +53,35 @@ static Future<void> createTables(sql.Database database) async {
     return kode_member;
   }
 
+
+
+  
+
   // Read all Membercard
   static Future<List<Map<String, dynamic>>> getDatamembercards() async {
     final db = await SQLHelper.db();
     return db.query('Membercard', orderBy: "kode_member");
   }
+
+List<Map<String, dynamic>> result = await getUsermembercard(username, password);
+if (result.isNotEmpty) {
+  Map<String, dynamic> row = result[0];
+  MembercardModel membercard = MembercardModel(
+    kodeMemberModel: row['kode_member'],
+    namaModel: row['nama'],
+    tanggalLahirModel: row['tanggal_lahir'],
+    alamatModel: row['alamat'],
+    jenisKelaminModel: row['jenis_kelamin'],
+    usernameModel: row['username'],
+    passwordModel: row['password'],
+  );
+  ChangeNotifierProvider(
+    create: (_) => membercard,
+    child: MemberPage(),
+  );
+}
+
+
 
   // Read a single Membercard by kode_member
   static Future<List<Map<String, dynamic>>> getUsermembercard(

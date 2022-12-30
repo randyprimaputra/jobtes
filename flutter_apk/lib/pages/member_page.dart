@@ -6,9 +6,10 @@ import '../db/sql_helper.dart';
 
 class MemberPage extends StatefulWidget {
 
-  final String username;
+  final String userName;
+  final String passWord;
 
-  const MemberPage({super.key, required this.username});
+  const MemberPage({super.key, required this.userName, required this.passWord);
 
   @override
   State<MemberPage> createState() => _MemberPageState();
@@ -17,33 +18,23 @@ class MemberPage extends StatefulWidget {
 
 class _MemberPageState extends State<MemberPage> {
 
-
    bool _isLoading = true;
    var kode_member;
   
   // This function is used to fetch all data from the database
 
-    final TextEditingController _namaController = TextEditingController();
-  final TextEditingController _tanggal_lahirController =
-      TextEditingController();
-  final TextEditingController _alamatController = TextEditingController();
-  TextEditingController jenis_kelaminController =
-      TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
-    _refreshDatamembercard(); // Loading the data when the page starts
+    _refreshUserLoginmembercard(); // Loading the data when the page starts
   }
 
   // This function is used to fetch data from the database
-  void _refreshDatamembercard() async {
-    final data = await SQLHelper.getDatamembercard();
+  void _refreshUserLoginmembercard() async {
+    final data = await SQLHelper.getUserLoginmembercard();
     if (mounted) {
       setState(() {
-        membercard = data;
+        var membercard = data;
         _isLoading = false;
       });
     }
@@ -54,24 +45,7 @@ class _MemberPageState extends State<MemberPage> {
     await SQLHelper.updatePasswordmembercard(
         kode_member,
         _passwordController.text);
-        _refreshDatamembercard();
-  }
-
-      Future<void> fetchMemberData() async {
-    final db = await SQLHelper.db();
-    final memberData = await db.query('Membercard',
-      where: "username = ?", whereArgs: [widget.username], limit: 1);
-
-
-    setState(() {
-      var kode_member = memberData[0]['kode_member'];
-      var name = memberData[0]['nama'];
-      var tanggal_lahir = memberData[0]['tanggal_lahir'];
-      var alamat = memberData[0]['alamat'];
-      var jenis_kelamin = memberData[0]['jenis_kelamin'];
-      var username = memberData[0]['username'];
-      var password = memberData[0]['password'];
-    });
+        _refreshUserLoginmembercard();
   }
 
 
@@ -127,7 +101,7 @@ class _MemberPageState extends State<MemberPage> {
           ListTile(
             leading: const Icon(Icons.key),
             title: const Text("Username"),
-            subtitle: Text('${widget.username}'),
+            subtitle: Text('${widget.userName}'),
             tileColor: Colors.green.shade400,
           ),
           ListTile(
