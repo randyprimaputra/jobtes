@@ -1,15 +1,14 @@
-// ignore_for_file: unnecessary_string_interpolations, non_constant_identifier_names, unused_local_variable
+// ignore_for_file: unnecessary_string_interpolations, non_constant_identifier_names, unused_local_variable, prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
-
 import '../db/sql_helper.dart';
 
 class MemberPage extends StatefulWidget {
 
-  final String userName;
-  final String passWord;
+  String username;
+  String password;
 
-  const MemberPage({super.key, required this.userName, required this.passWord});
+  MemberPage({super.key, required this.username, required this.password});
 
   @override
   State<MemberPage> createState() => _MemberPageState();
@@ -19,11 +18,9 @@ class MemberPage extends StatefulWidget {
 class _MemberPageState extends State<MemberPage> {
 
    bool _isLoading = true;
-   var kode_member;
-   final _passwordController = TextEditingController();
+
 
   // This function is used to fetch all data from the database
-
   @override
   void initState() {
     super.initState();
@@ -31,23 +28,13 @@ class _MemberPageState extends State<MemberPage> {
   }
 
   // This function is used to fetch data from the database
-  void _refreshUserLoginmembercard() async {
-  var userName;
-  var passWord;
-    final data = await SQLHelper.getUserLoginmembercard(widget.userName,widget.passWord);
-    if (mounted) {
-      setState(() {
-        var membercard = data;
-        _isLoading = false;
-      });
-    }
-  }
+
   
       // Update an existing password Membercard by kode_member
   Future<void> _updateDataPasswordmembercard(int kode_member) async {
     await SQLHelper.updatePasswordmembercard(
         kode_member,
-        _passwordController.text);
+        password);
         _refreshUserLoginmembercard();
   }
 
@@ -74,46 +61,43 @@ class _MemberPageState extends State<MemberPage> {
           ListTile(
             leading: const Icon(Icons.info_rounded),
             title: const Text("Kode Member"),
-            subtitle: const Text('kode_member'),
+            subtitle: Text(kode_member.toString()),
             tileColor: Colors.green.shade300,
           ),
           ListTile(
             leading: const Icon(Icons.person),
             title: const Text("Nama"),
-            subtitle: const Text('name'),
+            subtitle: Text(nama.toString()),
             tileColor: Colors.green.shade400,
           ),
           ListTile(
             leading: const Icon(Icons.date_range),
             title: const Text("Tanggal lahir"),
-            subtitle: const Text('tanggal_lahir'),
+            subtitle: Text(tanggal_lahir.toString()),
             tileColor: Colors.green.shade300,
           ),
           ListTile(
             leading: const Icon(Icons.location_city),
             title: const Text("Alamat"),
-            subtitle: const Text('alamat'),
+            subtitle: Text(alamat.toString()),
             tileColor: Colors.green.shade400,
           ),
           ListTile(
             leading: const Icon(Icons.girl_outlined),
             title: const Text("Jenis Kelamin"),
-            subtitle: const Text('jenis_kelamin'),
+            subtitle: Text(jenis_kelamin.toString()),
             tileColor: Colors.green.shade300,
           ),
           ListTile(
             leading: const Icon(Icons.key),
             title: const Text("Username"),
-            subtitle: Text('${widget.userName}'),
+            subtitle: Text('${widget.username}'),
             tileColor: Colors.green.shade400,
           ),
           ListTile(
             leading: const Icon(Icons.password),
             title: const Text("Password"),
-            subtitle: TextField(
-    controller: _passwordController,
-    obscureText: true,
-  ),
+            subtitle: Text(password.toString()),
             tileColor: Colors.green.shade300,
             trailing: IconButton(onPressed: () {}, icon: const Icon(Icons.edit))
           ),

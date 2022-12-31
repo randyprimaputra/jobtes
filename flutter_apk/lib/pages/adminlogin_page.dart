@@ -90,7 +90,7 @@ class _LoginPageState extends State<AdminLoginPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: const [
                       Text(
-                        'default password is ADMIN',
+                        'password is ADMIN',
                       ),
                     ],
                   ),

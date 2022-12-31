@@ -55,8 +55,10 @@ class _AdminPageState extends State<AdminPage> {
       _jenis_kelaminController.text = existingMembercard['jenis_kelamin'];
       _usernameController.text = existingMembercard['username'];
       _passwordController.text = existingMembercard['password'];
-     // _jenisKelamin = existingMembercard['jenis_kelamin'];
+     
     }
+
+    
 
     showModalBottomSheet(
       context: context,
@@ -104,9 +106,9 @@ class _AdminPageState extends State<AdminPage> {
               controller: _jenis_kelaminController,
               decoration: const InputDecoration(hintText: 'Jenis Kelamin'),
             ),
-/* Jenis Kelamin Dropdown masih error
-            DropdownButtonFormField(
-              value: _jenisKelamin,
+
+           /* DropdownButtonFormField(
+              value: jenis_kelaminController,
               decoration: const InputDecoration(hintText: 'Jenis Kelamin'),
               items: ['Laki-laki', 'Perempuan']
                   .map((value) => DropdownMenuItem(
@@ -116,7 +118,7 @@ class _AdminPageState extends State<AdminPage> {
                   .toList(),
               onChanged: (value) {
                 setState(() {
-                  _jenisKelamin = value as String?;
+                  jenis_kelaminController;
                 });
               },
             ), */
