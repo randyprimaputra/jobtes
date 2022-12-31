@@ -5,32 +5,24 @@ import 'package:flutter_apk/pages/admin_page.dart';
 import 'package:flutter_apk/pages/adminlogin_page.dart';
 import 'package:flutter_apk/pages/member_page.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_apk/controller/membercard_controller.dart';
-import 'package:flutter_apk/model/membercard_model.dart';
 
 import '../db/sql_helper.dart';
 
 class LoginPage extends StatefulWidget {
-    final SQLHelper sqlHelper;
-  final MembercardController membercardController;
-    LoginPage({Key key, this.sqlHelper, this.membercardController}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState(sqlHelper: sqlHelper, membercardController: membercardController);
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 // login member
 
 
 class _LoginPageState extends State<LoginPage> {
-
   // text editing controllers
+  final _usernameController = TextEditingController();
 
-_LoginPageState({this.sqlHelper, this.membercardController});
-
-  // Create an instance of SQLHelper and MembercardController
-  final sqlHelper = SQLHelper();
-  final membercardController = MembercardController(sqlHelper: sqlHelper);
+  final _passwordController = TextEditingController();
 
   // Sign userAdmin in method
   void signUserIn() async {
@@ -38,9 +30,9 @@ _LoginPageState({this.sqlHelper, this.membercardController});
     String username = _usernameController.text;
     String password = _passwordController.text;
 
-    // Check the user's credentials using the membercardController
-    List<MembercardModel> membercards = await widget.membercardController.login(username, password);
-    bool isValid = membercards.isNotEmpty;
+    // Check the user's credentials
+    List<Map<String, dynamic>> rows = await SQLHelper.getUserLoginmembercard(username, password);
+    bool isValid = rows.isNotEmpty;
     if (isValid) {
       // Navigate to the appropriate page based on the user's role
       if (username == 'Admin' && password == 'Admin') {
@@ -76,7 +68,6 @@ _LoginPageState({this.sqlHelper, this.membercardController});
           });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

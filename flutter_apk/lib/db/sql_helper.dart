@@ -78,6 +78,11 @@ static Future<void> createMembercardTable(sql.Database database) async {
       where: "username = ? AND password = ?", whereArgs: [username, password], limit: 1);
 }
 
+Future<List<MembercardModel>> login(String username, String password) async {
+  final membercardList = await SQLHelper.getUserLoginmembercard(username, password);
+  return membercardList.map((membercard) => MembercardModel.fromMap(membercard)).toList();
+}
+
   
 
   // Update a Membercard by kode_member
