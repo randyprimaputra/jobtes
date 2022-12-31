@@ -1,33 +1,30 @@
 class MembercardModel {
   final int kodeMemberModel;
-  final String namaModel;
-  final String tanggalLahirModel;
-  final String alamatModel;
-  final String jenisKelaminModel;
-  final String usernameModel;
-  final String passwordModel;
+  final String namaMemberModel;
+  final String tanggalLahirMemberModel;
+  final String alamatMemberModel;
+  final String jenisKelaminMemberModel;
+  final String usernameMemberModel;
+  final String passwordMemberModel;
 
   MembercardModel({
     required this.kodeMemberModel,
-    required this.namaModel,
-    required this.tanggalLahirModel,
-    required this.alamatModel,
-    required this.jenisKelaminModel,
-    required this.usernameModel,
-    required this.passwordModel,
+    required this.namaMemberModel,
+    required this.tanggalLahirMemberModel,
+    required this.alamatMemberModel,
+    required this.jenisKelaminMemberModel,
+    required this.usernameMemberModel,
+    required this.passwordMemberModel,
   });
-    static MembercardModel fromMap(Map<String, dynamic> map) {
+  static MembercardModel fromMap(Map<String, dynamic> map) {
     return MembercardModel(
       kodeMemberModel: map['kode_member'],
-      namaModel: map['nama'],
-      tanggalLahirModel: map['tanggal_lahir'],
-      alamatModel: map['alamat'],
-      jenisKelaminModel: map['jenis_kelamin'],
-      usernameModel: map['username'],
-      passwordModel: map['password'],
+      namaMemberModel: map['nama'],
+      tanggalLahirMemberModel: map['tanggal_lahir'],
+      alamatMemberModel: map['alamat'],
+      jenisKelaminMemberModel: map['jenis_kelamin'],
+      usernameMemberModel: map['username'],
+      passwordMemberModel: map['password'],
     );
   }
 }
-
-
-
