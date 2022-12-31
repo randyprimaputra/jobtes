@@ -17,28 +17,6 @@ class LoginPage extends StatefulWidget {
 
 // login member
 
-Future<bool> loginData(String username, String password) async {
-  final db = await SQLHelper.db();
-
-  // Query the database for a user with the specified username
-  List<Map<String, dynamic>> userData = await db.query('Membercard',
-      where: "username = ? AND password = ?", whereArgs: [username], limit: 1);
-
-  // Return true if the password matches the password in the database, false otherwise
-  return userData.isNotEmpty && password == userData[0]['password'];
-}
-
-
-Future<bool> login(String username, String password) async {
-  final db = await SQLHelper.db();
-
-  // Query the database for a user with the specified username
-  List<Map<String, dynamic>> userData = await db.query('Membercard',
-      where: "username = ?", whereArgs: [username], limit: 1);
-
-  // Return true if the password matches the password in the database, false otherwise
-  return userData.isNotEmpty && password == userData[0]['password'];
-} 
 
 class _LoginPageState extends State<LoginPage> {
   // text editing controllers
@@ -53,7 +31,8 @@ class _LoginPageState extends State<LoginPage> {
     String password = _passwordController.text;
 
     // Check the user's credentials
-    bool isValid = await loginData(username, password);
+    List<Map<String, dynamic>> rows = await SQLHelper.getUserLoginmembercard(username, password);
+    bool isValid = rows.isNotEmpty;
     if (isValid) {
       // Navigate to the appropriate page based on the user's role
       if (username == 'Admin' && password == 'Admin') {
@@ -66,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
             context,
             MaterialPageRoute(
                 builder: (context) => MemberPage(
-                      userName: username, passWord: : password,
+                      userName: username, passWord: password,
                     )));
       }
     } else {

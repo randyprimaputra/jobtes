@@ -16,4 +16,18 @@ class MembercardModel {
     required this.usernameModel,
     required this.passwordModel,
   });
+    static MembercardModel fromMap(Map<String, dynamic> map) {
+    return MembercardModel(
+      kodeMemberModel: map['kode_member'],
+      namaModel: map['nama'],
+      tanggalLahirModel: map['tanggal_lahir'],
+      alamatModel: map['alamat'],
+      jenisKelaminModel: map['jenis_kelamin'],
+      usernameModel: map['username'],
+      passwordModel: map['password'],
+    );
+  }
 }
+
+
+
