@@ -8,6 +8,11 @@ import '../model/membercard_model.dart';
 class DatabaseInstance {
   final String _databaseName = 'testjob.db';
   final int _databaseVersion = 1;
+  bool isUsernameTaken = false;
+
+  DatabaseInstance() {
+    _database = null;
+  }
 
   // MemberCard Table
   final String tableMemberCard = 'TMemberCard';
@@ -35,30 +40,55 @@ class DatabaseInstance {
     return openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
   }
 
-  // Membuat Table Membercard
+  // Create Table Membercard
   Future _onCreate(Database db, int version) async {
     await db.execute(
         'CREATE TABLE $tableMemberCard ($kodeMember INTEGER PRIMARY KEY, $name TEXT NULL, $alamat TEXT NULL, $tanggalLahir TEXT NOT NULL,$jenisKelamin TEXT NOT NULL,$username TEXT UNIQUE NOT NULL,$password TEXT NOT NULL)');
   }
 
-  // Fetch all data MemberCard
-  Future<List<MemberCardModel>> all() async {
-    final data = await _database!.query(tableMemberCard);
-    List<MemberCardModel> result =
-        data.map((e) => MemberCardModel.fromJson(e)).toList();
-    if (kDebugMode) {
-      print(result);
+  // Fetch All Data Table Membercard
+  Future<List<MemberCardModel>?> all() async {
+    try {
+      final data = await _database!.query(tableMemberCard, orderBy: kodeMember);
+      List<MemberCardModel> result =
+          data.map((e) => MemberCardModel.fromJson(e)).toList();
+      return result;
+    } catch (error) {
+      if (kDebugMode) {
+        print(error);
+      }
+      return null;
     }
-    return result;
   }
 
-  Future<int> insert(Map<String, dynamic> row) async {
+// Insert Data Table Membercard
+  Future<int> insertDataMemberCard(Map<String, dynamic> row) async {
     final query = await _database!.insert(tableMemberCard, row);
     return query;
   }
 
-    Future<int> update(int kodeMember, Map<String, dynamic> row) async {
-    final query = await _database!.update(tableMemberCard, row, where: '$kodeMember = ?', whereArgs: [kodeMember]);
-    return query;
+// Update Data Table Membercard
+  Future<int> updateDataMemberCard(
+      int kodeMember, Map<String, dynamic> row) async {
+    try {
+      final query = await _database!.update(tableMemberCard, row,
+          where: '$kodeMember = ?', whereArgs: [kodeMember]);
+      return query;
+    } catch (error) {
+      if (error is DatabaseException && error.isUniqueConstraintError()) {
+        isUsernameTaken = true;
+        if (kDebugMode) {
+          print('Username is already being used');
+        }
+        return -1;
+      } else {
+        rethrow;
+      }
+    }
+  }
+
+  Future deleteDataMemberCard(int kodeMember) async {
+    await _database!.delete(tableMemberCard,
+        where: '$kodeMember = ?', whereArgs: [kodeMember]);
   }
 }

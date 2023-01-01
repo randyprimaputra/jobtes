@@ -26,6 +26,11 @@ class _AdminPageState extends State<AdminPage> {
     setState(() {});
   }
 
+  Future deleteDataMemberCard(int kodeMember) async {
+    await databaseInstance!.deleteDataMemberCard(kodeMember);
+    setState(() {});
+  }
+
   @override
   void initState() {
     databaseInstance = DatabaseInstance();
@@ -43,7 +48,7 @@ class _AdminPageState extends State<AdminPage> {
             icon: const Icon(Icons.add),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (builder) {
-                return const CreateMemberPage();
+                return CreateMemberPage();
               })).then((value) {
                 setState(() {});
               });
@@ -64,26 +69,43 @@ class _AdminPageState extends State<AdminPage> {
                       Silahkan isi data MemberCards terlebih dahulu!!'''),
                       );
                     }
-                    return ListView.builder(
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                              title: Text(snapshot.data![index].name ?? ''),
-                              subtitle:
-                                  Text(snapshot.data![index].username ?? ''),
+                    return Expanded(
+                      child: ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(snapshot.data![index].name!),
+                              subtitle: Text(snapshot.data![index].username!),
                               leading: const Icon(Icons.person),
-                              trailing: IconButton(
-                                onPressed: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (builder) {
-                                    return UpdateMemberPage(memberCardModel: snapshot.data![index],);
-                                  })).then((value) {
-                                    setState(() {});
-                                  });
-                                },
-                                icon: Icon(Icons.edit),
-                              ));
-                        });
+                              trailing: SizedBox(
+                                width: 100,
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {
+                                          Navigator.push(context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) {
+                                            return UpdateMemberPage(
+                                              memberCardModel:
+                                                  snapshot.data![index],
+                                            );
+                                          })).then((value) {
+                                            setState(() {});
+                                          });
+                                        },
+                                        icon: Icon(Icons.edit)),
+                                    IconButton(
+                                      onPressed: () => deleteDataMemberCard(
+                                          snapshot.data![index].kodeMember!),
+                                      icon: Icon(Icons.delete),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                    );
                   } else {
                     if (kDebugMode) {
                       print(snapshot.error);

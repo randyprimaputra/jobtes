@@ -15,9 +15,6 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: AdminPage(),
-
-      //masih terdapat eror
-      //home: AdminPage(),
     );
   }
 }

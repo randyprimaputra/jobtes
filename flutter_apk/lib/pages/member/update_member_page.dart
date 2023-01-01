@@ -1,11 +1,17 @@
+// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 import '/components/my_appbar.dart';
 import '/db/database_instance.dart';
 import '/model/membercard_model.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class UpdateMemberPage extends StatefulWidget {
   final MemberCardModel? memberCardModel;
-  const UpdateMemberPage({Key? key, this.memberCardModel}) : super(key: key);
+  UpdateMemberPage({Key? key, this.memberCardModel}) : super(key: key);
+
+  //panggil catch eror username taken
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   State<UpdateMemberPage> createState() => _UpdateMemberCard();
@@ -26,10 +32,8 @@ class _UpdateMemberCard extends State<UpdateMemberPage> {
     databaseInstance.database();
     nameController.text = widget.memberCardModel!.name ?? '';
     alamatController.text = widget.memberCardModel!.alamat ?? '';
-    tanggalLahirController.text =
-        widget.memberCardModel!.tanggalLahir ?? '';
-    jenisKelaminController.text =
-        widget.memberCardModel!.jenisKelamin ?? '';
+    tanggalLahirController.text = widget.memberCardModel!.tanggalLahir ?? '';
+    jenisKelaminController.text = widget.memberCardModel!.jenisKelamin ?? '';
     usernameController.text = widget.memberCardModel!.username ?? '';
     passwordController.text = widget.memberCardModel!.password ?? '';
     super.initState();
@@ -38,44 +42,65 @@ class _UpdateMemberCard extends State<UpdateMemberPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: widget.scaffoldKey,
       appBar: const MyAppBar(title: 'Edit Member Page'),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Nama'),
-            TextField(controller: nameController),
-            const SizedBox(height: 15),
-            const Text('Alamat'),
-            TextField(controller: alamatController),
-            const Text('Tanggal Lahir'),
-            TextField(controller: tanggalLahirController),
-            const SizedBox(height: 15),
-            const Text('Jenis Kelamin'),
-            TextField(controller: jenisKelaminController),
-            const Text('Username'),
-            TextField(controller: usernameController),
-            const SizedBox(height: 15),
-            const Text('Password'),
-            TextField(controller: passwordController),
-            const SizedBox(height: 15),
-            ElevatedButton(
-                onPressed: () async {
-                  await databaseInstance.update(widget.memberCardModel!.kodeMember!,{
-                    
-                    'name': nameController.text,
-                    'alamat': alamatController.text,
-                    'tanggal_lahir': tanggalLahirController.text,
-                    'jenis_kelamin': jenisKelaminController.text,
-                    'username': usernameController.text,
-                    'password': passwordController.text,
-                  });
-                  Navigator.pop(context);
-                  //  setState(() {});
-                },
-                child: const Text('Simpan'))
-          ],
+        child: SingleChildScrollView(
+          child: Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Nama'),
+                TextField(controller: nameController),
+                const SizedBox(height: 15),
+                const Text('Alamat'),
+                TextField(controller: alamatController),
+                const Text('Tanggal Lahir'),
+                TextField(controller: tanggalLahirController),
+                const SizedBox(height: 15),
+                const Text('Jenis Kelamin'),
+                TextField(controller: jenisKelaminController),
+                const Text('Username'),
+                TextField(
+                  controller: usernameController,
+                  enabled: false,
+                ),
+                const SizedBox(height: 15),
+                const Text('Password'),
+                TextField(controller: passwordController),
+                const SizedBox(height: 15),
+                ElevatedButton(
+                    onPressed: () async {
+                      await databaseInstance.updateDataMemberCard(
+                          widget.memberCardModel!.kodeMember!, {
+                        if (nameController.text != null)
+                          'name': nameController.text,
+                        if (alamatController.text != null)
+                          'alamat': alamatController.text,
+                        if (tanggalLahirController.text != null)
+                          'tanggal_lahir': tanggalLahirController.text,
+                        if (jenisKelaminController.text != null)
+                          'jenis_kelamin': jenisKelaminController.text,
+                        if (passwordController.text != null)
+                          'password': passwordController.text,
+                      });
+
+                      if (databaseInstance.isUsernameTaken) {
+                        Fluttertoast.showToast(
+                          msg: 'Username is already taken',
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 2,
+                        );
+                      } else {
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: const Text('Simpan'))
+              ],
+            ),
+          ),
         ),
       ),
     );
