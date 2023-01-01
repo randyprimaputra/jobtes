@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_apk/components/my_appbar.dart';
-import 'package:flutter_apk/db/database_instance.dart';
-import 'package:flutter_apk/model/membercard_model.dart';
+import '/components/my_appbar.dart';
+import '/db/database_instance.dart';
+import '/model/membercard_model.dart';
 
-class UpdateMemberCard extends StatefulWidget {
+class UpdateMemberPage extends StatefulWidget {
   final MemberCardModel? memberCardModel;
-  const UpdateMemberCard({super.key, this.memberCardModel});
+  const UpdateMemberPage({Key? key, this.memberCardModel}) : super(key: key);
 
   @override
-  State<UpdateMemberCard> createState() => _UpdateMemberCard();
+  State<UpdateMemberPage> createState() => _UpdateMemberCard();
 }
 
-class _UpdateMemberCard extends State<UpdateMemberCard> {
+class _UpdateMemberCard extends State<UpdateMemberPage> {
   //panggi database
   DatabaseInstance databaseInstance = DatabaseInstance();
   TextEditingController nameController = TextEditingController();
@@ -24,14 +24,14 @@ class _UpdateMemberCard extends State<UpdateMemberCard> {
   @override
   void initState() {
     databaseInstance.database();
-    nameController.text = widget.memberCardModel!.name.toString();
-    alamatController.text = widget.memberCardModel!.alamat.toString();
+    nameController.text = widget.memberCardModel!.name ?? '';
+    alamatController.text = widget.memberCardModel!.alamat ?? '';
     tanggalLahirController.text =
-        widget.memberCardModel!.tanggalLahir.toString();
+        widget.memberCardModel!.tanggalLahir ?? '';
     jenisKelaminController.text =
-        widget.memberCardModel!.jenisKelamin.toString();
-    usernameController.text = widget.memberCardModel!.username.toString();
-    passwordController.text = widget.memberCardModel!.password.toString();
+        widget.memberCardModel!.jenisKelamin ?? '';
+    usernameController.text = widget.memberCardModel!.username ?? '';
+    passwordController.text = widget.memberCardModel!.password ?? '';
     super.initState();
   }
 
@@ -62,7 +62,8 @@ class _UpdateMemberCard extends State<UpdateMemberCard> {
             const SizedBox(height: 15),
             ElevatedButton(
                 onPressed: () async {
-                  await databaseInstance.insert({
+                  await databaseInstance.update(widget.memberCardModel!.kodeMember!,{
+                    
                     'name': nameController.text,
                     'alamat': alamatController.text,
                     'tanggal_lahir': tanggalLahirController.text,

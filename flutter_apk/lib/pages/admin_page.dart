@@ -2,10 +2,9 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_apk/components/my_appbar.dart';
+import 'package:flutter_apk/pages/member/update_member_page.dart';
 import '../db/database_instance.dart';
-import 'member/create_member_page.dart';
-import 'member/update_member_page.dart';
+import './member/create_member_page.dart';
 import '../model/membercard_model.dart';
 
 class AdminPage extends StatefulWidget {
@@ -77,7 +76,7 @@ class _AdminPageState extends State<AdminPage> {
                                 onPressed: () {
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (builder) {
-                                    return const CreateMemberPage();
+                                    return UpdateMemberPage(memberCardModel: snapshot.data![index],);
                                   })).then((value) {
                                     setState(() {});
                                   });

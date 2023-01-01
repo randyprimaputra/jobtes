@@ -56,4 +56,9 @@ class DatabaseInstance {
     final query = await _database!.insert(tableMemberCard, row);
     return query;
   }
+
+    Future<int> update(int kodeMember, Map<String, dynamic> row) async {
+    final query = await _database!.update(tableMemberCard, row, where: '$kodeMember = ?', whereArgs: [kodeMember]);
+    return query;
+  }
 }
