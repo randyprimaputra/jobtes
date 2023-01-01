@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_apk/pages/login_page.dart';
+import 'package:flutter_apk/pages/admin_page.dart';
 
 //import 'login_page.dart';
 
@@ -8,15 +8,14 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-const MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return  const MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: AdminPage(),
 
-      
       //masih terdapat eror
       //home: AdminPage(),
     );
