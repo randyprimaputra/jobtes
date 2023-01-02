@@ -37,7 +37,29 @@ class DatabaseInstance {
   Future _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, _databaseName);
-    return openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
+    Database db = await openDatabase(path,
+        version: _databaseVersion, onCreate: _onCreate);
+
+    // Check if there is an ADMIN user in the database
+    int? count = Sqflite.firstIntValue(await db.rawQuery(
+        'SELECT COUNT(*) FROM $tableMemberCard WHERE $username = "ADMIN"'));
+
+    // If there is no ADMIN user in the database, insert a new user with the username and password ADMIN
+    if (count == 0) {
+      await db.insert(
+        tableMemberCard,
+        {
+          name: 'ADMIN',
+          alamat: 'ADMIN',
+          tanggalLahir: 'ADMIN',
+          jenisKelamin: 'ADMIN',
+          username: 'ADMIN',
+          password: 'ADMIN',
+        },
+      );
+    }
+
+    return db;
   }
 
   // Create Table Membercard
@@ -49,7 +71,7 @@ class DatabaseInstance {
   // Fetch All Data Table Membercard
   Future<List<MemberCardModel>?> dataMembercard() async {
     try {
-      final data = await _database!.query(tableMemberCard , orderBy: kodeMember);
+      final data = await _database!.query(tableMemberCard, orderBy: kodeMember);
       List<MemberCardModel> result =
           data.map((e) => MemberCardModel.fromJson(e)).toList();
       return result;
@@ -63,20 +85,24 @@ class DatabaseInstance {
 
 // Insert Data Table Membercard
   Future<int> insertDataMemberCard(Map<String, dynamic> row) async {
-    try{
-    final query = await _database!.insert(tableMemberCard, row,);
-    return query;
-  }catch (error) {
-    if (error is DatabaseException && error.isUniqueConstraintError()) {
-      isUsernameTaken = true;
-      if (kDebugMode) {
-        print('Username is already being used');
+    try {
+      final query = await _database!.insert(
+        tableMemberCard,
+        row,
+      );
+      return query;
+    } catch (error) {
+      if (error is DatabaseException && error.isUniqueConstraintError()) {
+        isUsernameTaken = true;
+        if (kDebugMode) {
+          print('Username is already being used');
+        }
+        return -1;
+      } else {
+        rethrow;
       }
-      return -1;
-    } else {
-      rethrow;
     }
-  }}
+  }
 
 // Update Data Table Membercard
   // Future<int> updateDataMemberCard(
@@ -117,16 +143,26 @@ class DatabaseInstance {
 //   }
 // }
 
-Future<int> updateDataMemberCard(
+  Future<int> updateDataMemberCard(
       int kodeMember, Map<String, dynamic> row) async {
     final query = await _database!.update(tableMemberCard, row,
-        where: 'kode_member = ?', whereArgs: [kodeMember], conflictAlgorithm: ConflictAlgorithm.replace);
+        where: 'kode_member = ?',
+        whereArgs: [kodeMember],
+        conflictAlgorithm: ConflictAlgorithm.replace);
     return query;
   }
 
+  Future<bool> login(String username, String password) async {
+    final db = await database();
+    final result = await db.query(
+      tableMemberCard,
+      where: 'username = ? AND password = ?',
+      whereArgs: [username, password],
+    );
+    return result.isNotEmpty;
+  }
 
-
-
+  // Delete
   Future deleteDataMemberCard(int kodeMember) async {
     await _database!.delete(tableMemberCard,
         where: 'kode_member = ?', whereArgs: ['$kodeMember']);

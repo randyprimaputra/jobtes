@@ -29,43 +29,41 @@ class _AdminPageState extends State<AdminPage> {
 
 // Future deleteDataMemberCard(int kodeMember) async {
 //   await databaseInstance!.deleteDataMemberCard(kodeMember);
-//   setState(() {});
+//   setState(() {});a
 //   Fluttertoast.showToast(
 //     msg: 'Delete member success',
 //   );
 // }
 
-Future deleteDataMemberCard(int kodeMember) async {
-  await showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text('Are you sure?'),
-      content: Text('This action cannot be undone.'),
-      actions: [
-        TextButton(
-          child: Text('Cancel'),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        TextButton(
-          child: Text('Delete'),
-          onPressed: () async {
-            await databaseInstance!.deleteDataMemberCard(kodeMember);
-            setState(() {});
-            Navigator.of(context).pop();
-            Fluttertoast.showToast(
-              msg: 'Member has been deleted',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 2,
-            );
-          },
-        ),
-      ],
-    ),
-  );
-}
-
-
+  Future deleteDataMemberCard(int kodeMember) async {
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Are you sure?'),
+        content: Text('This action cannot be undone.'),
+        actions: [
+          TextButton(
+            child: Text('Cancel'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          TextButton(
+            child: Text('Delete'),
+            onPressed: () async {
+              await databaseInstance!.deleteDataMemberCard(kodeMember);
+              setState(() {});
+              Navigator.of(context).pop();
+              Fluttertoast.showToast(
+                msg: 'Member has been deleted',
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 2,
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -105,18 +103,35 @@ Future deleteDataMemberCard(int kodeMember) async {
             ? FutureBuilder<List<MemberCardModel>?>(
                 future: databaseInstance?.dataMembercard(),
                 builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data!.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text('Data Member Masih Kosong'),
+                          TextButton(
+                            child: const Text('Add Member'),
+                            onPressed: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (builder) {
+                                return CreateMemberPage();
+                              })).then((value) {
+                                setState(() {});
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                   if (snapshot.hasData) {
-                    if (snapshot.data!.isEmpty) {
-                      return const Center(
-                        child: Text('Data Member Masih Kosong'),
-                      );
-                    }
                     return Expanded(
                       child: ListView.builder(
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
                             return ListTile(
-                              title: Text(snapshot.data![index].name!),
+                              title:
+                                  Text(snapshot.data![index].name.toString()),
                               subtitle: Text(snapshot.data![index].username!),
                               leading: const Icon(Icons.person),
                               trailing: SizedBox(
