@@ -43,13 +43,13 @@ class DatabaseInstance {
   // Create Table Membercard
   Future _onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE $tableMemberCard ($kodeMember INTEGER PRIMARY KEY, $name TEXT NULL, $alamat TEXT NULL, $tanggalLahir TEXT NOT NULL,$jenisKelamin TEXT NOT NULL,$username TEXT UNIQUE NOT NULL,$password TEXT NOT NULL)');
+        'CREATE TABLE $tableMemberCard ($kodeMember INTEGER PRIMARY KEY, $name TEXT , $alamat TEXT , $tanggalLahir TEXT NULL,$jenisKelamin TEXT ,$username TEXT ,$password TEXT )');
   }
 
   // Fetch All Data Table Membercard
-  Future<List<MemberCardModel>?> all() async {
+  Future<List<MemberCardModel>?> dataMembercard() async {
     try {
-      final data = await _database!.query(tableMemberCard, orderBy: kodeMember);
+      final data = await _database!.query(tableMemberCard , orderBy: kodeMember);
       List<MemberCardModel> result =
           data.map((e) => MemberCardModel.fromJson(e)).toList();
       return result;
@@ -63,32 +63,72 @@ class DatabaseInstance {
 
 // Insert Data Table Membercard
   Future<int> insertDataMemberCard(Map<String, dynamic> row) async {
-    final query = await _database!.insert(tableMemberCard, row);
+    try{
+    final query = await _database!.insert(tableMemberCard, row,);
+    return query;
+  }catch (error) {
+    if (error is DatabaseException && error.isUniqueConstraintError()) {
+      isUsernameTaken = true;
+      if (kDebugMode) {
+        print('Username is already being used');
+      }
+      return -1;
+    } else {
+      rethrow;
+    }
+  }}
+
+// Update Data Table Membercard
+  // Future<int> updateDataMemberCard(
+  //     int kodeMember, Map<String, dynamic> row) async {
+  //   try {
+  //     final query = await _database!.update(tableMemberCard, row,
+  //         where: 'kode_member = ?', whereArgs: [kodeMember]);
+  //     return query;
+  //   } catch (error) {
+  //     if (error is DatabaseException && error.isUniqueConstraintError()) {
+  //       isUsernameTaken = true;
+  //       if (kDebugMode) {
+  //         print('Username is already being used');
+  //       }
+  //       return -1;
+  //     } else {
+  //       rethrow;
+  //     }
+  //   }
+  // }
+
+// Future<int> updateDataMemberCard(
+//     int kodeMember, Map<String, dynamic> row) async {
+//   try {
+//     // Check if the new username is already being used by another member
+//     final existingMember = await _database!.query(tableMemberCard,
+//         where: 'username = ?', whereArgs: [row[username] as String]);
+//     if (existingMember.isNotEmpty) {
+//       // If the new username is already being used, return -1 to indicate that the update failed
+//       return -1;
+//     }
+//     // If the new username is not being used, proceed with the update
+//     final query = await _database!.update(tableMemberCard, row,
+//         where: 'kode_member = ?', whereArgs: [kodeMember]);
+//     return query;
+//   } catch (error) {
+//     rethrow;
+//   }
+// }
+
+Future<int> updateDataMemberCard(
+      int kodeMember, Map<String, dynamic> row) async {
+    final query = await _database!.update(tableMemberCard, row,
+        where: 'kode_member = ?', whereArgs: [kodeMember], conflictAlgorithm: ConflictAlgorithm.replace);
     return query;
   }
 
-// Update Data Table Membercard
-  Future<int> updateDataMemberCard(
-      int kodeMember, Map<String, dynamic> row) async {
-    try {
-      final query = await _database!.update(tableMemberCard, row,
-          where: '$kodeMember = ?', whereArgs: [kodeMember]);
-      return query;
-    } catch (error) {
-      if (error is DatabaseException && error.isUniqueConstraintError()) {
-        isUsernameTaken = true;
-        if (kDebugMode) {
-          print('Username is already being used');
-        }
-        return -1;
-      } else {
-        rethrow;
-      }
-    }
-  }
+
+
 
   Future deleteDataMemberCard(int kodeMember) async {
     await _database!.delete(tableMemberCard,
-        where: '$kodeMember = ?', whereArgs: [kodeMember]);
+        where: 'kode_member = ?', whereArgs: ['$kodeMember']);
   }
 }

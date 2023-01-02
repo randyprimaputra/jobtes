@@ -56,27 +56,33 @@ class _CreateMemberPageState extends State<CreateMemberPage> {
                 TextField(controller: passwordController),
                 const SizedBox(height: 15),
                 ElevatedButton(
-                    onPressed: () async {
-                      await databaseInstance.insertDataMemberCard({
-                        'name': nameController.text,
-                        'alamat': alamatController.text,
-                        'tanggal_lahir': tanggalLahirController.text,
-                        'jenis_kelamin': jenisKelaminController.text,
-                        'username': usernameController.text,
-                        'password': passwordController.text,
-                      });
-                      if (databaseInstance.isUsernameTaken) {
-                        Fluttertoast.showToast(
+                  onPressed: () async {
+                    await databaseInstance.insertDataMemberCard({
+                      'name': nameController.text,
+                      'alamat': alamatController.text,
+                      'tanggal_lahir': tanggalLahirController.text,
+                      'jenis_kelamin': jenisKelaminController.text,
+                      'username': usernameController.text,
+                      'password': passwordController.text,
+                    });
+                    if (databaseInstance.isUsernameTaken) {
+                      Fluttertoast.showToast(
                           msg: 'Username is already taken',
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.BOTTOM,
                           timeInSecForIosWeb: 2,
-                        );
-                      } else {
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: const Text('Simpan'))
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: 'Create member success',
+                      );
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: const Text('Simpan'),
+                )
               ],
             ),
           ),

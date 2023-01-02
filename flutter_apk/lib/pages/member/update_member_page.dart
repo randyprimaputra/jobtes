@@ -30,12 +30,12 @@ class _UpdateMemberCard extends State<UpdateMemberPage> {
   @override
   void initState() {
     databaseInstance.database();
-    nameController.text = widget.memberCardModel!.name ?? '';
-    alamatController.text = widget.memberCardModel!.alamat ?? '';
-    tanggalLahirController.text = widget.memberCardModel!.tanggalLahir ?? '';
-    jenisKelaminController.text = widget.memberCardModel!.jenisKelamin ?? '';
-    usernameController.text = widget.memberCardModel!.username ?? '';
-    passwordController.text = widget.memberCardModel!.password ?? '';
+    nameController.text = widget.memberCardModel?.name ?? '';
+    alamatController.text = widget.memberCardModel?.alamat ?? '';
+    tanggalLahirController.text = widget.memberCardModel?.tanggalLahir ?? '';
+    jenisKelaminController.text = widget.memberCardModel?.jenisKelamin ?? '';
+    usernameController.text = widget.memberCardModel?.username ?? '';
+    passwordController.text = widget.memberCardModel?.password ?? '';
     super.initState();
   }
 
@@ -64,40 +64,37 @@ class _UpdateMemberCard extends State<UpdateMemberPage> {
                 const Text('Username'),
                 TextField(
                   controller: usernameController,
-                  enabled: false,
+                  enabled: true,
                 ),
                 const SizedBox(height: 15),
                 const Text('Password'),
                 TextField(controller: passwordController),
                 const SizedBox(height: 15),
                 ElevatedButton(
-                    onPressed: () async {
-                      await databaseInstance.updateDataMemberCard(
-                          widget.memberCardModel!.kodeMember!, {
-                        if (nameController.text != null)
-                          'name': nameController.text,
-                        if (alamatController.text != null)
-                          'alamat': alamatController.text,
-                        if (tanggalLahirController.text != null)
-                          'tanggal_lahir': tanggalLahirController.text,
-                        if (jenisKelaminController.text != null)
-                          'jenis_kelamin': jenisKelaminController.text,
-                        if (passwordController.text != null)
-                          'password': passwordController.text,
-                      });
+                  onPressed: () async {
+                    // Update the data in the table
+                    await databaseInstance.updateDataMemberCard(
+                      widget.memberCardModel!.kodeMember!,
+                      {
+                        'name': nameController.text,
+                        'alamat': alamatController.text,
+                        'tanggal_lahir': tanggalLahirController.text,
+                        'jenis_kelamin': jenisKelaminController.text,
+                        'username': usernameController.text,
+                        'password': passwordController.text,
+                      },
+                    );
 
-                      if (databaseInstance.isUsernameTaken) {
-                        Fluttertoast.showToast(
-                          msg: 'Username is already taken',
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          timeInSecForIosWeb: 2,
-                        );
-                      } else {
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: const Text('Simpan'))
+                    // Show a toast message to confirm the update
+                    Fluttertoast.showToast(
+                      msg: 'Update member success',
+                    );
+
+                    // Pop the current page
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Simpan'),
+                ),
               ],
             ),
           ),
