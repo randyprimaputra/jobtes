@@ -25,7 +25,7 @@ class _MemberPageState extends State<MemberPage> {
   void initState() {
     super.initState();
     databaseInstance
-        .getLoggedInMember(password: '', username: '')
+        .getLoggedInMember(password: loggedInMember!.password.toString(), username: loggedInMember!.username.toString())
         .then((member) {
       setState(() {
         loggedInMember = member;
