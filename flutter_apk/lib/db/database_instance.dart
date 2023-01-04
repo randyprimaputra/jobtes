@@ -162,6 +162,21 @@ class DatabaseInstance {
     return result.isNotEmpty;
   }
 
+  Future<MemberCardModel?> getLoggedInMember({
+    required String username,
+    required String password,
+  }) async {
+    final db = await database();
+    final List<Map<String, dynamic>> maps = await db.query(tableMemberCard,
+        where: 'username = ? AND password = ?',
+        whereArgs: [username, password]);
+    if (maps.isNotEmpty) {
+      return MemberCardModel.fromJson(maps.first);
+    } else {
+      return null;
+    }
+  }
+
   // Delete
   Future deleteDataMemberCard(int kodeMember) async {
     await _database!.delete(tableMemberCard,
