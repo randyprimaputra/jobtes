@@ -6,12 +6,9 @@ import '../../db/database_instance.dart';
 import '../../model/membercard_model.dart';
 
 class MemberPage extends StatefulWidget {
-   
-  final String? username;
-  final String? password;
+  final MemberCardModel? member;
 
-  const MemberPage({super.key, this.username, this.password});
-
+  const MemberPage({Key? key, required this.member}) : super(key: key);
 
   @override
   State<MemberPage> createState() => _MemberPageState();
@@ -20,40 +17,30 @@ class MemberPage extends StatefulWidget {
 class _MemberPageState extends State<MemberPage> {
   DatabaseInstance databaseInstance = DatabaseInstance();
 
-  MemberCardModel? loggedInMember;
+  late MemberCardModel loggedInMember;
 
   @override
   void initState() {
     super.initState();
-    databaseInstance
-        .getLoggedInMember(password: widget.password.toString(), username: widget.username.toString())
-        .then((member) {
-      setState(() {
-        loggedInMember = member;
-        debugPrint('The value of loggedInMember is: $loggedInMember');        
-      });
-    });
   }
-  
 
   @override
   Widget build(BuildContext context) {
+    loggedInMember = widget.member!;
+    bool _isPasswordVisible = false;
     TextEditingController nameController = TextEditingController();
     TextEditingController alamatController = TextEditingController();
     TextEditingController tanggalLahirController = TextEditingController();
     TextEditingController jenisKelaminController = TextEditingController();
     TextEditingController usernameController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
+    nameController.text = loggedInMember.name.toString();
+    alamatController.text = loggedInMember.alamat.toString();
+    tanggalLahirController.text = loggedInMember.tanggalLahir.toString();
+    jenisKelaminController.text = loggedInMember.jenisKelamin.toString();
+    usernameController.text = loggedInMember.username.toString();
+    passwordController.text = loggedInMember.password.toString();
 
-      nameController.text = loggedInMember!.name.toString();
-  alamatController.text = loggedInMember!.alamat.toString();
-  tanggalLahirController.text = loggedInMember!.tanggalLahir.toString();
-  jenisKelaminController.text = loggedInMember!.jenisKelamin.toString();
-  usernameController.text = loggedInMember!.username.toString();
-  passwordController.text = loggedInMember!.password.toString();
-
-
-    // Use the username and password here as needed
     return Scaffold(
       appBar: const MyAppBar(title: 'Member Page'),
       body: Padding(
@@ -92,9 +79,22 @@ class _MemberPageState extends State<MemberPage> {
                 controller: usernameController,
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Password'),
-                controller: passwordController,
-                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  enabled: true,
+                  suffixIcon: IconButton(
+                    icon: Icon(_isPasswordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                  ),
+                ),
+                  controller: passwordController,
+        
               ),
             ],
           ),

@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../components/my_button.dart';
 import '../components/my_textfield.dart';
 import '../db/database_instance.dart';
+import '../model/membercard_model.dart';
 import 'member/member_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -22,6 +23,8 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
 
   final databaseInstance = DatabaseInstance();
+
+  MemberCardModel? member;
 
   Future<void> _getStoredCredentials() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -113,11 +116,17 @@ class _LoginPageState extends State<LoginPage> {
                           return const AdminPage();
                         }));
                       } else {
+                        final members = await databaseInstance.dataMembercard();
+                        for (final m in members!) {
+                          if (m.username == usernameController.text) {
+                            member = m;
+                            break;
+                          }
+                        }
                         Navigator.push(context,
                             MaterialPageRoute(builder: (builder) {
                           return MemberPage(
-                            username: usernameController.text,
-                            password: passwordController.text,
+                            member: member!,
                           );
                         }));
                       }
