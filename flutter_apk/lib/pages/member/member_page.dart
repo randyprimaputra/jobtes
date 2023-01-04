@@ -6,13 +6,11 @@ import '../../db/database_instance.dart';
 import '../../model/membercard_model.dart';
 
 class MemberPage extends StatefulWidget {
-  final Key key;
+   
   final String? username;
 
-  const MemberPage({
-    required this.key,
-    this.username,
-  }) : super(key: key);
+  const MemberPage({super.key, this.username});
+
 
   @override
   State<MemberPage> createState() => _MemberPageState();
