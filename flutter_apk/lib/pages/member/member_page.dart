@@ -44,14 +44,6 @@ class _MemberPageState extends State<MemberPage> {
     TextEditingController usernameController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
 
-    if (loggedInMember != null) {
-      nameController.text = loggedInMember?.name!;
-      alamatController.text = loggedInMember?.alamat!;
-      tanggalLahirController.text = loggedInMember?.tanggalLahir!;
-      jenisKelaminController.text = loggedInMember?.jenisKelamin!;
-      usernameController.text = loggedInMember?.username!;
-      passwordController.text = loggedInMember?.password!;
-    }
 
     // Use the username and password here as needed
     return Scaffold(

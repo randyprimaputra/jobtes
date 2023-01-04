@@ -115,14 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                       } else {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (builder) {
-<<<<<<< HEAD
-                          return const MemberPage();
-=======
-                          return MemberPage(
-                            key: const Key('memberPage'),
-                            username: usernameController.text,
-                          );
->>>>>>> 6fefb39233f4e5d82fb9faed4abb21e2ab1efd88
+                          return   MemberPage(key: null,);
                         }));
                       }
                     } else {
