@@ -6,7 +6,13 @@ import '../../db/database_instance.dart';
 import '../../model/membercard_model.dart';
 
 class MemberPage extends StatefulWidget {
-  const MemberPage({super.key});
+  final Key key;
+  final String? username;
+
+  const MemberPage({
+    required this.key,
+    this.username,
+  }) : super(key: key);
 
   @override
   State<MemberPage> createState() => _MemberPageState();
@@ -15,37 +21,36 @@ class MemberPage extends StatefulWidget {
 class _MemberPageState extends State<MemberPage> {
   DatabaseInstance databaseInstance = DatabaseInstance();
 
-MemberCardModel? loggedInMember;
+  MemberCardModel? loggedInMember;
+
   @override
   void initState() {
     super.initState();
-    databaseInstance.getLoggedInMember().then((member) {
+    databaseInstance
+        .getLoggedInMember(password: '', username: '')
+        .then((member) {
       setState(() {
         loggedInMember = member;
       });
     });
   }
-  }
-
-  
 
   @override
   Widget build(BuildContext context) {
-    
     TextEditingController nameController = TextEditingController();
-TextEditingController alamatController = TextEditingController();
-TextEditingController tanggalLahirController = TextEditingController();
-TextEditingController jenisKelaminController = TextEditingController();
-TextEditingController usernameController = TextEditingController();
-TextEditingController passwordController = TextEditingController();
-    
+    TextEditingController alamatController = TextEditingController();
+    TextEditingController tanggalLahirController = TextEditingController();
+    TextEditingController jenisKelaminController = TextEditingController();
+    TextEditingController usernameController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
+
     if (loggedInMember != null) {
-      nameController.text = loggedInMember.name;
-      alamatController.text = loggedInMember.alamat;
-      tanggalLahirController.text = loggedInMember.tanggalLahir;
-      jenisKelaminController.text = loggedInMember.jenisKelamin;
-      usernameController.text = loggedInMember.username;
-      passwordController.text = loggedInMember.password;
+      nameController.text = loggedInMember?.name!;
+      alamatController.text = loggedInMember?.alamat!;
+      tanggalLahirController.text = loggedInMember?.tanggalLahir!;
+      jenisKelaminController.text = loggedInMember?.jenisKelamin!;
+      usernameController.text = loggedInMember?.username!;
+      passwordController.text = loggedInMember?.password!;
     }
 
     // Use the username and password here as needed
@@ -56,7 +61,7 @@ TextEditingController passwordController = TextEditingController();
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            children:  [
+            children: [
               SizedBox(
                 width: 120,
                 height: 120,
