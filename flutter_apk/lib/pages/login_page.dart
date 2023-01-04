@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_apk/components/my_button.dart';
-import 'package:flutter_apk/components/my_textfield.dart';
+import 'package:flutter_apk/components/my_appbar.dart';
 import 'package:flutter_apk/pages/admin_page.dart';
-import 'package:flutter_apk/pages/adminlogin_page.dart';
-import 'package:flutter_apk/pages/member_page.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../db/sql_helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../components/my_button.dart';
+import '../components/my_textfield.dart';
+import '../db/database_instance.dart';
+import '../model/membercard_model.dart';
+import 'member/member_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,64 +17,39 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-// login member
-
-
 class _LoginPageState extends State<LoginPage> {
-  // text editing controllers
-  final _usernameController = TextEditingController();
+  final usernameController = TextEditingController();
 
-  final _passwordController = TextEditingController();
+  final passwordController = TextEditingController();
 
-  // Sign userAdmin in method
-  void signUserIn() async {
-    // Get the entered username and password
-    String username = _usernameController.text;
-    String password = _passwordController.text;
+  final databaseInstance = DatabaseInstance();
 
-    // Check the user's credentials
-    List<Map<String, dynamic>> rows = await SQLHelper.getUserLoginmembercard(username, password);
-    bool isValid = rows.isNotEmpty;
-    if (isValid) {
-      // Navigate to the appropriate page based on the user's role
-      if (username == 'Admin' && password == 'Admin') {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const AdminPage()));
-      } else {
-        // Query the database for the user's data
-        // Navigate to the member page
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MemberPage(
-                      userName: username, passWord: password,
-                    )));
-      }
-    } else {
-      // Display an error message
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text("Error"),
-              content: const Text("Incorrect username or password"),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text("OK"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            );
-          });
+  MemberCardModel? member;
+
+  Future<void> _getStoredCredentials() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? username = prefs.getString('username');
+    String? password = prefs.getString('password');
+
+    if (username == null || password == null) {
+      prefs.setString('username', 'ADMIN');
+      prefs.setString('password', 'ADMIN');
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getStoredCredentials().then((_) {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green,
+      appBar: const MyAppBar(
+        title: 'Login Page',
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
@@ -80,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 100),
-                const Icon(Icons.lock_person, size: 100, color: Colors.white),
+                const Icon(Icons.lock_person, size: 100, color: Colors.green),
                 // Hello again !
                 Text(
                   'Login',
@@ -96,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                 // username textfield
                 // ignore: prefer_const_constructors
                 MyTextField(
-                  controller: _usernameController,
+                  controller: usernameController,
                   hintText: 'Username',
                   obsecureText: false,
                 ),
@@ -104,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 10),
                 // password textfield
                 MyTextField(
-                  controller: _passwordController,
+                  controller: passwordController,
                   hintText: 'Password',
                   obsecureText: true,
                 ),
@@ -126,46 +103,69 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 25),
                 // sign in button
                 MyButton(
-                  onTap: signUserIn,
-                ),
-                const SizedBox(height: 10),
+                  onTap: () async {
+                    final bool loginSuccess = await databaseInstance.login(
+                      usernameController.text,
+                      passwordController.text,
+                    );
+                    if (loginSuccess) {
+                      if (usernameController.text == 'ADMIN' &&
+                          passwordController.text == 'ADMIN') {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (builder) {
+                          return const AdminPage();
+                        }));
+                      } else {
+                        final members = await databaseInstance.dataMembercard();
+                        for (final m in members!) {
+                          if (m.username == usernameController.text) {
+                            member = m;
+                            break;
+                          }
+                        }
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (builder) {
+                          return MemberPage(
+                            member: member!,
+                          );
+                        }));
+                      }
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: 'Invalid username or password',
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM);
+                    }
 
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Text(
-                        'Not have account? ',
+                    const SizedBox(height: 10);
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: const [
+                          Text(
+                            'Not have account? ',
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Text(
-                        'Ask your Administrator for register',
+                    );
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: const [
+                          Text(
+                            'Ask your Administrator for register',
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
               ],
             ),
           ),
         ),
-      ),
-
-// function untuk masuk ke admin page ketika tidak memiliki akun admin
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const AdminLoginPage()));
-        },
-        backgroundColor: Colors.green[700],
-        child: const Icon(Icons.admin_panel_settings),
       ),
     );
   }

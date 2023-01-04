@@ -1,256 +1,180 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: prefer_const_constructors
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_apk/db/sql_helper.dart';
+import 'package:flutter_apk/pages/member/update_member_page.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import '../db/database_instance.dart';
+import './member/create_member_page.dart';
+import '../model/membercard_model.dart';
 
 class AdminPage extends StatefulWidget {
-  const AdminPage({Key? key}) : super(key: key);
+  const AdminPage({super.key});
 
   @override
   State<AdminPage> createState() => _AdminPageState();
 }
 
 class _AdminPageState extends State<AdminPage> {
-//All _membercards
-  List<Map<String, dynamic>> _membercards = [];
+  DatabaseInstance? databaseInstance;
 
-  bool _isLoading = true;
-
-// This function is used to fetch all data from the database
-  void _refreshDatamembercards() async {
-    final data = await SQLHelper.getDatamembercards();
-    if (mounted) {
-      setState(() {
-        _membercards = data;
-        _isLoading = false;
-      });
-    }
+  Future _refresh() async {
+    setState(() {});
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _refreshDatamembercards(); // Loading the data when the page starts
+  Future initDatabase() async {
+    await databaseInstance!.database();
+    setState(() {});
   }
 
-  final TextEditingController _namaController = TextEditingController();
-  final TextEditingController _tanggal_lahirController =
-      TextEditingController();
-  final TextEditingController _alamatController = TextEditingController();
-  final TextEditingController _jenis_kelaminController =
-      TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  //String? _jenisKelamin;
-  // This function will be triggered when the floating button is pressed
-  // It will also be triggered when want to update a Membercard
-  void _showForm(int? kode_member) async {
-    if (kode_member != null) {
-      // kode_member == null -> create new item
-      // kode_member != null -> update an existing item
-      final existingMembercard = _membercards
-          .firstWhere((element) => element['kode_member'] == kode_member);
-      _namaController.text = existingMembercard['nama'];
-      _tanggal_lahirController.text = existingMembercard['tanggal_lahir'];
-      _alamatController.text = existingMembercard['alamat'];
-      _jenis_kelaminController.text = existingMembercard['jenis_kelamin'];
-      _usernameController.text = existingMembercard['username'];
-      _passwordController.text = existingMembercard['password'];
-     
-    }
+// Future deleteDataMemberCard(int kodeMember) async {
+//   await databaseInstance!.deleteDataMemberCard(kodeMember);
+//   setState(() {});a
+//   Fluttertoast.showToast(
+//     msg: 'Delete member success',
+//   );
+// }
 
-    
-
-    showModalBottomSheet(
+  Future deleteDataMemberCard(int kodeMember) async {
+    await showDialog(
       context: context,
-      elevation: 1,
-      isScrollControlled: true,
-      builder: (_) => Container(
-        padding: EdgeInsets.only(
-          top: 60,
-          left: 15,
-          right: 15,
-          // this will prevent the soft keyboard from covering the text fields
-          bottom: MediaQuery.of(context).viewInsets.bottom != 0
-              ? MediaQuery.of(context).viewInsets.bottom
-              : 120,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            TextField(
-              controller: _namaController,
-              decoration: const InputDecoration(
-                hintText: 'Nama',
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextField(
-              controller: _tanggal_lahirController,
-              decoration: const InputDecoration(hintText: 'Tanggal Lahir'),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextField(
-              controller: _alamatController,
-              decoration: const InputDecoration(hintText: 'Alamat'),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            
-            TextField(
-              controller: _jenis_kelaminController,
-              decoration: const InputDecoration(hintText: 'Jenis Kelamin'),
-            ),
-
-           /* DropdownButtonFormField(
-              value: jenis_kelaminController,
-              decoration: const InputDecoration(hintText: 'Jenis Kelamin'),
-              items: ['Laki-laki', 'Perempuan']
-                  .map((value) => DropdownMenuItem(
-                        value: value,
-                        child: Text(value),
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                setState(() {
-                  jenis_kelaminController;
-                });
-              },
-            ), */
-            const SizedBox(
-              height: 10,
-            ),
-            TextField(
-              controller: _usernameController,
-              decoration: const InputDecoration(hintText: 'Username'),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(hintText: 'Password'),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                // Save new Membercard
-                if (kode_member == null) {
-                  await _addDatamembercard();
-                }
-
-                if (kode_member != null) {
-                  await _updateDatamembercard(kode_member);
-                }
-
-                // Clear the text fields
-                _namaController.text = '';
-                _tanggal_lahirController.text = '';
-                _alamatController.text = '';
-                _jenis_kelaminController.text = '';
-                _usernameController.text = '';
-                _passwordController.text = '';
-
-                // Close the bottom sheet
-                Navigator.of(context).pop();
-              },
-              child: Text(kode_member == null ? 'Create New' : 'Update'),
-            )
-          ],
-        ),
+      builder: (context) => AlertDialog(
+        title: Text('Are you sure?'),
+        content: Text('This action cannot be undone.'),
+        actions: [
+          TextButton(
+            child: Text('Cancel'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          TextButton(
+            child: Text('Delete'),
+            onPressed: () async {
+              await databaseInstance!.deleteDataMemberCard(kodeMember);
+              setState(() {});
+              Navigator.of(context).pop();
+              Fluttertoast.showToast(
+                msg: 'Member has been deleted',
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 2,
+              );
+            },
+          ),
+        ],
       ),
     );
   }
 
-  // Insert a new Membercard to the database
-  Future<void> _addDatamembercard() async {
-    await SQLHelper.createMembercard(
-        _namaController.text,
-        _tanggal_lahirController.text,
-        _alamatController.text,
-        _jenis_kelaminController.text,
-        _usernameController.text,
-        _passwordController.text);
-    _refreshDatamembercards();
-  }
-
-  // Update an existing Membercard by kode_member
-  Future<void> _updateDatamembercard(int kode_member) async {
-    await SQLHelper.updateDatamembercard(
-        kode_member,
-        _namaController.text,
-        _tanggal_lahirController.text,
-        _alamatController.text,
-        _jenis_kelaminController.text,
-        _usernameController.text,
-        _passwordController.text);
-    _refreshDatamembercards();
-  }
-
-  // Delete a Membercard by id
-  void _deleteDatamembercard(int kode_member) async {
-    await SQLHelper.deleteDatamembercard(kode_member);
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Successfully deleted a Membercard!'),
-    ));
-    _refreshDatamembercards();
+  @override
+  void initState() {
+    databaseInstance = DatabaseInstance();
+    initDatabase();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    } else {
-      return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: const Text('Admin Page'),
-          backgroundColor: Colors.green[800],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Admin Page'),
+        centerTitle: true,
         backgroundColor: Colors.green,
-        body: ListView.builder(
-          itemCount: _membercards.length,
-          itemBuilder: (context, index) => Card(
-            color: Colors.orange[200],
-            margin: const EdgeInsets.all(15),
-            child: ListTile(
-              title: Text(_membercards[index]['nama']),
-              subtitle: Text(_membercards[index]['username']),
-              trailing: SizedBox(
-                width: 100,
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () =>
-                          _showForm(_membercards[index]['kode_member']),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () => _deleteDatamembercard(
-                          _membercards[index]['kode_member']),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => _showForm(null),
-          backgroundColor: Colors.green[700],
-          child: const Icon(Icons.group_add),
-        ),
-      );
-    }
+        elevation: 0,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+          bottomRight: Radius.circular(25),
+        )),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (builder) {
+                return CreateMemberPage();
+              })).then((value) {
+                setState(() {});
+              });
+            },
+          )
+        ],
+      ),
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: databaseInstance != null
+            ? FutureBuilder<List<MemberCardModel>?>(
+                future: databaseInstance?.dataMembercard(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data!.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text('Data Member Masih Kosong'),
+                          TextButton(
+                            child: const Text('Add Member'),
+                            onPressed: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (builder) {
+                                return CreateMemberPage();
+                              })).then((value) {
+                                setState(() {});
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  if (snapshot.hasData) {
+                    return Expanded(
+                      child: ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title:
+                                  Text(snapshot.data![index].name.toString()),
+                              subtitle: Text(snapshot.data![index].username!),
+                              leading: const Icon(Icons.person),
+                              trailing: SizedBox(
+                                width: 100,
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {
+                                          Navigator.push(context,
+                                              MaterialPageRoute(
+                                                  builder: (builder) {
+                                            return UpdateMemberPage(
+                                              memberCardModel:
+                                                  snapshot.data![index],
+                                            );
+                                          })).then((value) {
+                                            setState(() {});
+                                          });
+                                        },
+                                        icon: Icon(Icons.edit)),
+                                    IconButton(
+                                      onPressed: () => deleteDataMemberCard(
+                                          snapshot.data![index].kodeMember!),
+                                      icon: Icon(Icons.delete),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                    );
+                  } else {
+                    if (kDebugMode) {
+                      print(snapshot.error);
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(color: Colors.green),
+                    );
+                  }
+                },
+              )
+            : const CircularProgressIndicator(color: Colors.green),
+      ),
+    );
   }
 }
