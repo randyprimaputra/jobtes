@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_apk/components/my_appbar.dart';
-import 'package:flutter_apk/model/postProduct_model.dart';
+import 'package:flutter_apk/model/postproduct_model.dart';
 import 'package:flutter_apk/services/remote_service.dart';
 
 class ProductPage extends StatefulWidget {
@@ -12,7 +12,7 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
 
-  List<PostProductModel>? postsProduct;
+  PostProductModel? postProduct;
   var isLoaded = false;
 
   @override
@@ -20,17 +20,21 @@ class _ProductPageState extends State<ProductPage> {
     super.initState();
 
     //fetch data from API
-    getDataProduct();
-  }
-
-  getDataProduct () async {
-    postsProduct = await RemoteService().getDataProduct();
-    if(postsProduct != null)
-    {
-      setState(() {
+    getDataProduct().then((data){
+      setState((){
+        postProduct = data;
         isLoaded = true;
       });
+    });
+  }
+
+  Future<List<PostProductModel>> getDataProduct () async {
+    var postProduct = await RemoteService().getDataProduct();
+    if(postProduct != null)
+    {
+      return [postProduct];
     }
+    return null;
   }
 
   @override
@@ -40,11 +44,10 @@ class _ProductPageState extends State<ProductPage> {
       body: Visibility(
         visible: isLoaded,
         child: ListView.builder(
-          itemCount: postsProduct?.length,
+          itemCount: postProduct?.products?.length,
           itemBuilder: ((context, index) {
-          return Container(
-            child: Text(postsProduct![index].products),
-          );
+          return Text(postProduct!.products![index]!.title.toString());
+          
         })),
         replacement: const Center(
           child: CircularProgressIndicator(),

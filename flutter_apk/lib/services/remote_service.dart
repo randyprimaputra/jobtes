@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class RemoteService
 {
-  Future<List<PostProductModel>?> getDataProduct() async {
+  Future<List<PostProductModel>> getDataProduct() async{
     var client = http.Client();
 
     var uri = Uri.parse('https://dummyjson.com/products');
@@ -12,5 +12,6 @@ class RemoteService
       var json = response.body;
       return postFromJson(json);
     }
+    return null;
   }
  }
