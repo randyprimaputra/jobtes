@@ -11,8 +11,7 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-
-  PostProductModel? postProduct;
+  List<PostProductModel>? postProduct;
   var isLoaded = false;
 
   @override
@@ -20,39 +19,70 @@ class _ProductPageState extends State<ProductPage> {
     super.initState();
 
     //fetch data from API
-    getDataProduct().then((data){
-      setState((){
-        postProduct = data;
-        isLoaded = true;
-      });
-    });
+    getDataProduct();
   }
 
-  Future<List<PostProductModel>> getDataProduct () async {
-    var postProduct = await RemoteService().getDataProduct();
-    if(postProduct != null)
-    {
-      return [postProduct];
+  getDataProduct() async {
+    postProduct = await RemoteService().getPosts();
+    if (postProduct != null) {
+      setState(() {
+        isLoaded = true;
+      });
     }
-    return null;
   }
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: const MyAppBar(title: 'Product'),
       body: Visibility(
         visible: isLoaded,
         child: ListView.builder(
-          itemCount: postProduct?.products?.length,
-          itemBuilder: ((context, index) {
-          return Text(postProduct!.products![index]!.title.toString());
-          
-        })),
+          itemCount: postProduct?.length,
+          itemBuilder: (context, index) {
+            return Container(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.grey[300],
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          postProduct![index].title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          postProduct![index].body ?? '',
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
         replacement: const Center(
           child: CircularProgressIndicator(),
-        ) ,
-      )
+        ),
+      ),
     );
   }
 }
