@@ -82,21 +82,32 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 10),
                 // password textfield
-                TextField(
-                  obscureText: _isPasswordVisible,
-                  controller: passwordController,
-                  decoration: InputDecoration(
-                      labelText: 'Password',
-                      enabled: true,
-                      suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
-                            });
-                          },
-                          icon: Icon(_isPasswordVisible
-                              ? Icons.visibility_off
-                              : Icons.visibility))),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: TextField(
+                    obscureText: _isPasswordVisible,
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.grey.shade400)),
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        labelText: 'Password',
+                        enabled: true,
+                        hintText: 'Password',
+                        suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
+                            icon: Icon(_isPasswordVisible
+                                ? Icons.visibility_off
+                                : Icons.visibility))),
+                  ),
                 ),
                 const SizedBox(height: 10),
 
