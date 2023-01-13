@@ -44,6 +44,8 @@ class _LoginPageState extends State<LoginPage> {
     _getStoredCredentials().then((_) {});
   }
 
+  bool _isPasswordVisible = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,10 +82,21 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 10),
                 // password textfield
-                MyTextField(
+                TextField(
+                  obscureText: _isPasswordVisible,
                   controller: passwordController,
-                  hintText: 'Password',
-                  obsecureText: true,
+                  decoration: InputDecoration(
+                      labelText: 'Password',
+                      enabled: true,
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                          icon: Icon(_isPasswordVisible
+                              ? Icons.visibility_off
+                              : Icons.visibility))),
                 ),
                 const SizedBox(height: 10),
 

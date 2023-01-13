@@ -24,10 +24,11 @@ class _MemberPageState extends State<MemberPage> {
     super.initState();
   }
 
+  bool _isPasswordVisible = true;
   @override
   Widget build(BuildContext context) {
     loggedInMember = widget.member!;
-    bool _isPasswordVisible = false;
+
     TextEditingController nameController = TextEditingController();
     TextEditingController alamatController = TextEditingController();
     TextEditingController tanggalLahirController = TextEditingController();
@@ -79,13 +80,14 @@ class _MemberPageState extends State<MemberPage> {
                 controller: usernameController,
               ),
               TextField(
+                obscureText: _isPasswordVisible,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   enabled: true,
                   suffixIcon: IconButton(
                     icon: Icon(_isPasswordVisible
-                        ? Icons.visibility
-                        : Icons.visibility_off),
+                        ? Icons.visibility_off
+                        : Icons.visibility),
                     onPressed: () {
                       setState(() {
                         _isPasswordVisible = !_isPasswordVisible;
@@ -93,8 +95,7 @@ class _MemberPageState extends State<MemberPage> {
                     },
                   ),
                 ),
-                  controller: passwordController,
-        
+                controller: passwordController,
               ),
             ],
           ),
