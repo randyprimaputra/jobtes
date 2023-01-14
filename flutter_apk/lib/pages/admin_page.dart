@@ -151,11 +151,13 @@ class _AdminPageState extends State<AdminPage> {
                                             setState(() {});
                                           });
                                         },
-                                        icon: Icon(Icons.edit)),
+                                        icon: Icon(Icons.edit),
+                                        color: Colors.green),
                                     IconButton(
                                       onPressed: () => deleteDataMemberCard(
                                           snapshot.data![index].kodeMember!),
                                       icon: Icon(Icons.delete),
+                                      color: Colors.red[700],
                                     ),
                                   ],
                                 ),

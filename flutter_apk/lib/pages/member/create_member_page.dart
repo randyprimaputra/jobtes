@@ -56,6 +56,7 @@ class _CreateMemberPageState extends State<CreateMemberPage> {
                 TextField(controller: passwordController),
                 const SizedBox(height: 15),
                 ElevatedButton(
+                  
                   onPressed: () async {
                     await databaseInstance.insertDataMemberCard({
                       'name': nameController.text,
@@ -77,11 +78,14 @@ class _CreateMemberPageState extends State<CreateMemberPage> {
                     } else {
                       Fluttertoast.showToast(
                         msg: 'Create member success',
+                        backgroundColor: Colors.green
                       );
                       Navigator.pop(context);
                     }
                   },
+                  
                   child: const Text('Simpan'),
+
                 )
               ],
             ),

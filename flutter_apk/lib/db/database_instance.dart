@@ -83,7 +83,7 @@ class DatabaseInstance {
     }
   }
 
-// Insert Data Table Membercard
+// Insert
   Future<int> insertDataMemberCard(Map<String, dynamic> row) async {
     try {
       final query = await _database!.insert(
@@ -104,45 +104,7 @@ class DatabaseInstance {
     }
   }
 
-// Update Data Table Membercard
-  // Future<int> updateDataMemberCard(
-  //     int kodeMember, Map<String, dynamic> row) async {
-  //   try {
-  //     final query = await _database!.update(tableMemberCard, row,
-  //         where: 'kode_member = ?', whereArgs: [kodeMember]);
-  //     return query;
-  //   } catch (error) {
-  //     if (error is DatabaseException && error.isUniqueConstraintError()) {
-  //       isUsernameTaken = true;
-  //       if (kDebugMode) {
-  //         print('Username is already being used');
-  //       }
-  //       return -1;
-  //     } else {
-  //       rethrow;
-  //     }
-  //   }
-  // }
-
-// Future<int> updateDataMemberCard(
-//     int kodeMember, Map<String, dynamic> row) async {
-//   try {
-//     // Check if the new username is already being used by another member
-//     final existingMember = await _database!.query(tableMemberCard,
-//         where: 'username = ?', whereArgs: [row[username] as String]);
-//     if (existingMember.isNotEmpty) {
-//       // If the new username is already being used, return -1 to indicate that the update failed
-//       return -1;
-//     }
-//     // If the new username is not being used, proceed with the update
-//     final query = await _database!.update(tableMemberCard, row,
-//         where: 'kode_member = ?', whereArgs: [kodeMember]);
-//     return query;
-//   } catch (error) {
-//     rethrow;
-//   }
-// }
-
+  // Update
   Future<int> updateDataMemberCard(
       int kodeMember, Map<String, dynamic> row) async {
     final query = await _database!.update(tableMemberCard, row,
@@ -152,6 +114,7 @@ class DatabaseInstance {
     return query;
   }
 
+ // Login
   Future<bool> login(String username, String password) async {
     final db = await database();
     final result = await db.query(
@@ -160,21 +123,6 @@ class DatabaseInstance {
       whereArgs: [username, password],
     );
     return result.isNotEmpty;
-  }
-
-  Future<MemberCardModel?> getLoggedInMember({
-    required String username,
-    required String password,
-  }) async {
-    final db = await database();
-    final List<Map<String, dynamic>> maps = await db.query(tableMemberCard,
-        where: 'username = ? AND password = ?',
-        whereArgs: [username, password]);
-    if (maps.isNotEmpty) {
-      return MemberCardModel.fromJson(maps.first);
-    } else {
-      return null;
-    }
   }
 
   // Delete

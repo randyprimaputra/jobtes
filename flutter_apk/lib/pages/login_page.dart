@@ -45,9 +45,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   bool _isPasswordVisible = true;
-
+  
+  
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: const MyAppBar(
         title: 'Login Page',
@@ -59,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 100),
-                const Icon(Icons.lock_person, size: 100, color: Colors.green),
+                Icon(Icons.lock_person, size: 100, color: Colors.yellow[700]),
                 // Hello again !
                 Text(
                   'Login',
@@ -88,14 +90,17 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: _isPasswordVisible,
                     controller: passwordController,
                     decoration: InputDecoration(
-                        enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white)),
+                        enabledBorder:  OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.white),
+                            borderRadius: BorderRadius.circular(12)),
                         focusedBorder: OutlineInputBorder(
                             borderSide:
-                                BorderSide(color: Colors.grey.shade400)),
+                                BorderSide(color: Colors.green.shade400),
+                            borderRadius: BorderRadius.circular(12)),
                         fillColor: Colors.grey.shade200,
                         filled: true,
                         labelText: 'Password',
+                        labelStyle: const TextStyle(color: Colors.black),
                         enabled: true,
                         hintText: 'Password',
                         suffixIcon: IconButton(
@@ -140,7 +145,8 @@ class _LoginPageState extends State<LoginPage> {
                           return const AdminPage();
                         }));
                       } else {
-                        final members = await databaseInstance.dataMembercard();
+                        final members =
+                            await databaseInstance.dataMembercard();
                         for (final m in members!) {
                           if (m.username == usernameController.text) {
                             member = m;
@@ -158,6 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                       Fluttertoast.showToast(
                           msg: 'Invalid username or password',
                           toastLength: Toast.LENGTH_SHORT,
+                          backgroundColor: Colors.red,
                           gravity: ToastGravity.BOTTOM);
                     }
 

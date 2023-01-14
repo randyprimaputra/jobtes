@@ -88,6 +88,7 @@ class _UpdateMemberCard extends State<UpdateMemberPage> {
                     // Show a toast message to confirm the update
                     Fluttertoast.showToast(
                       msg: 'Update member success',
+                      backgroundColor: Colors.green
                     );
 
                     // Pop the current page
