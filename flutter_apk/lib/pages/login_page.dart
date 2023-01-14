@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_apk/components/my_appbar.dart';
-import 'package:flutter_apk/pages/admin_page.dart';
+import '/components/my_appbar.dart';
+import 'admin_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../components/my_button.dart';
-import '../components/my_textfield.dart';
-import '../db/database_instance.dart';
-import '../model/membercard_model.dart';
+import '/components/my_button.dart';
+import '/components/my_textfield.dart';
+import '/db/database_instance.dart';
+import '/model/membercard_model.dart';
 import 'member/member_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 100),
-                const Icon(Icons.lock_person, size: 100, color: Colors.green),
+                Icon(Icons.lock_person, size: 100, color: Colors.yellow[700]),
                 // Hello again !
                 Text(
                   'Login',
@@ -82,21 +82,35 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 10),
                 // password textfield
-                TextField(
-                  obscureText: _isPasswordVisible,
-                  controller: passwordController,
-                  decoration: InputDecoration(
-                      labelText: 'Password',
-                      enabled: true,
-                      suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
-                            });
-                          },
-                          icon: Icon(_isPasswordVisible
-                              ? Icons.visibility_off
-                              : Icons.visibility))),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: TextField(
+                    obscureText: _isPasswordVisible,
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.white),
+                            borderRadius: BorderRadius.circular(12)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.green.shade400),
+                            borderRadius: BorderRadius.circular(12)),
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        labelText: 'Password',
+                        labelStyle: const TextStyle(color: Colors.black),
+                        enabled: true,
+                        hintText: 'Password',
+                        suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
+                            icon: Icon(_isPasswordVisible
+                                ? Icons.visibility_off
+                                : Icons.visibility))),
+                  ),
                 ),
                 const SizedBox(height: 10),
 
@@ -147,6 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                       Fluttertoast.showToast(
                           msg: 'Invalid username or password',
                           toastLength: Toast.LENGTH_SHORT,
+                          backgroundColor: Colors.red,
                           gravity: ToastGravity.BOTTOM);
                     }
 

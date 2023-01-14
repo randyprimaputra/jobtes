@@ -2,11 +2,11 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_apk/pages/member/update_member_page.dart';
+import 'member/update_member_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../db/database_instance.dart';
-import './member/create_member_page.dart';
-import '../model/membercard_model.dart';
+import '/db/database_instance.dart';
+import 'member/create_member_page.dart';
+import '/model/membercard_model.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -56,6 +56,7 @@ class _AdminPageState extends State<AdminPage> {
                 msg: 'Member has been deleted',
                 toastLength: Toast.LENGTH_SHORT,
                 gravity: ToastGravity.BOTTOM,
+                backgroundColor: Colors.red,
                 timeInSecForIosWeb: 2,
               );
             },
@@ -125,44 +126,43 @@ class _AdminPageState extends State<AdminPage> {
                     );
                   }
                   if (snapshot.hasData) {
-                    return Expanded(
-                      child: ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title:
-                                  Text(snapshot.data![index].name.toString()),
-                              subtitle: Text(snapshot.data![index].username!),
-                              leading: const Icon(Icons.person),
-                              trailing: SizedBox(
-                                width: 100,
-                                child: Row(
-                                  children: [
-                                    IconButton(
-                                        onPressed: () {
-                                          Navigator.push(context,
-                                              MaterialPageRoute(
-                                                  builder: (builder) {
-                                            return UpdateMemberPage(
-                                              memberCardModel:
-                                                  snapshot.data![index],
-                                            );
-                                          })).then((value) {
-                                            setState(() {});
-                                          });
-                                        },
-                                        icon: Icon(Icons.edit)),
-                                    IconButton(
-                                      onPressed: () => deleteDataMemberCard(
-                                          snapshot.data![index].kodeMember!),
-                                      icon: Icon(Icons.delete),
-                                    ),
-                                  ],
-                                ),
+                    return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(snapshot.data![index].name.toString()),
+                            subtitle: Text(snapshot.data![index].username!),
+                            leading: const Icon(Icons.person),
+                            trailing: SizedBox(
+                              width: 100,
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                                builder: (builder) {
+                                          return UpdateMemberPage(
+                                            memberCardModel:
+                                                snapshot.data![index],
+                                          );
+                                        })).then((value) {
+                                          setState(() {});
+                                        });
+                                      },
+                                      icon: Icon(Icons.edit),
+                                      color: Colors.green),
+                                  IconButton(
+                                    onPressed: () => deleteDataMemberCard(
+                                        snapshot.data![index].kodeMember!),
+                                    icon: Icon(Icons.delete),
+                                    color: Colors.red[700],
+                                  ),
+                                ],
                               ),
-                            );
-                          }),
-                    );
+                            ),
+                          );
+                        });
                   } else {
                     if (kDebugMode) {
                       print(snapshot.error);
