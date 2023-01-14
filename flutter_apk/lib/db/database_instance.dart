@@ -65,7 +65,7 @@ class DatabaseInstance {
   // Create Table Membercard
   Future _onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE $tableMemberCard ($kodeMember INTEGER PRIMARY KEY, $name TEXT , $alamat TEXT , $tanggalLahir TEXT NULL,$jenisKelamin TEXT ,$username TEXT ,$password TEXT )');
+        'CREATE TABLE $tableMemberCard ($kodeMember INTEGER PRIMARY KEY, $name TEXT , $alamat TEXT , $tanggalLahir TEXT NULL,$jenisKelamin TEXT ,$username TEXT UNIQUE ,$password TEXT )');
   }
 
   // Fetch All Data Table Membercard
@@ -114,7 +114,7 @@ class DatabaseInstance {
     return query;
   }
 
- // Login
+  // Login
   Future<bool> login(String username, String password) async {
     final db = await database();
     final result = await db.query(

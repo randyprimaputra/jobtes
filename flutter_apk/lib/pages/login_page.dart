@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_apk/components/my_appbar.dart';
-import 'package:flutter_apk/pages/admin_page.dart';
+import '/components/my_appbar.dart';
+import 'admin_page.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../components/my_button.dart';
-import '../components/my_textfield.dart';
-import '../db/database_instance.dart';
-import '../model/membercard_model.dart';
+import '/components/my_button.dart';
+import '/components/my_textfield.dart';
+import '/db/database_instance.dart';
+import '/model/membercard_model.dart';
 import 'member/member_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -45,11 +45,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   bool _isPasswordVisible = true;
-  
-  
+
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: const MyAppBar(
         title: 'Login Page',
@@ -90,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: _isPasswordVisible,
                     controller: passwordController,
                     decoration: InputDecoration(
-                        enabledBorder:  OutlineInputBorder(
+                        enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(color: Colors.white),
                             borderRadius: BorderRadius.circular(12)),
                         focusedBorder: OutlineInputBorder(
@@ -145,8 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                           return const AdminPage();
                         }));
                       } else {
-                        final members =
-                            await databaseInstance.dataMembercard();
+                        final members = await databaseInstance.dataMembercard();
                         for (final m in members!) {
                           if (m.username == usernameController.text) {
                             member = m;

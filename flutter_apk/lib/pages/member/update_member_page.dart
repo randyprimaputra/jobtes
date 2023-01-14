@@ -47,57 +47,54 @@ class _UpdateMemberCard extends State<UpdateMemberPage> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SingleChildScrollView(
-          child: Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('Nama'),
-                TextField(controller: nameController),
-                const SizedBox(height: 15),
-                const Text('Alamat'),
-                TextField(controller: alamatController),
-                const Text('Tanggal Lahir'),
-                TextField(controller: tanggalLahirController),
-                const SizedBox(height: 15),
-                const Text('Jenis Kelamin'),
-                TextField(controller: jenisKelaminController),
-                const Text('Username'),
-                TextField(
-                  controller: usernameController,
-                  enabled: true,
-                ),
-                const SizedBox(height: 15),
-                const Text('Password'),
-                TextField(controller: passwordController),
-                const SizedBox(height: 15),
-                ElevatedButton(
-                  onPressed: () async {
-                    // Update the data in the table
-                    await databaseInstance.updateDataMemberCard(
-                      widget.memberCardModel!.kodeMember!,
-                      {
-                        'name': nameController.text,
-                        'alamat': alamatController.text,
-                        'tanggal_lahir': tanggalLahirController.text,
-                        'jenis_kelamin': jenisKelaminController.text,
-                        'username': usernameController.text,
-                        'password': passwordController.text,
-                      },
-                    );
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Nama'),
+              TextField(controller: nameController),
+              const SizedBox(height: 15),
+              const Text('Alamat'),
+              TextField(controller: alamatController),
+              const Text('Tanggal Lahir'),
+              TextField(controller: tanggalLahirController),
+              const SizedBox(height: 15),
+              const Text('Jenis Kelamin'),
+              TextField(controller: jenisKelaminController),
+              const Text('Username'),
+              TextField(
+                controller: usernameController,
+                enabled: true,
+              ),
+              const SizedBox(height: 15),
+              const Text('Password'),
+              TextField(controller: passwordController),
+              const SizedBox(height: 15),
+              ElevatedButton(
+                onPressed: () async {
+                  // Update the data in the table
+                  await databaseInstance.updateDataMemberCard(
+                    widget.memberCardModel!.kodeMember!,
+                    {
+                      'name': nameController.text,
+                      'alamat': alamatController.text,
+                      'tanggal_lahir': tanggalLahirController.text,
+                      'jenis_kelamin': jenisKelaminController.text,
+                      'username': usernameController.text,
+                      'password': passwordController.text,
+                    },
+                  );
 
-                    // Show a toast message to confirm the update
-                    Fluttertoast.showToast(
+                  // Show a toast message to confirm the update
+                  Fluttertoast.showToast(
                       msg: 'Update member success',
-                      backgroundColor: Colors.green
-                    );
+                      backgroundColor: Colors.green);
 
-                    // Pop the current page
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Simpan'),
-                ),
-              ],
-            ),
+                  // Pop the current page
+                  Navigator.pop(context);
+                },
+                child: const Text('Simpan'),
+              ),
+            ],
           ),
         ),
       ),

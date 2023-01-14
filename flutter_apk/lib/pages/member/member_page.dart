@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import '../../components/my_appbar.dart';
-import '../../db/database_instance.dart';
-import '../../model/membercard_model.dart';
+import '/components/my_appbar.dart';
+import '/db/database_instance.dart';
+import '/model/membercard_model.dart';
 
 class MemberPage extends StatefulWidget {
   final MemberCardModel? member;

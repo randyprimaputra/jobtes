@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_apk/components/my_appbar.dart';
-import 'package:flutter_apk/db/database_instance.dart';
+import '/components/my_appbar.dart';
+import '/db/database_instance.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class CreateMemberPage extends StatefulWidget {
@@ -35,60 +35,57 @@ class _CreateMemberPageState extends State<CreateMemberPage> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SingleChildScrollView(
-          child: Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('Nama'),
-                TextField(controller: nameController),
-                const SizedBox(height: 15),
-                const Text('Alamat'),
-                TextField(controller: alamatController),
-                const Text('Tanggal Lahir'),
-                TextField(controller: tanggalLahirController),
-                const SizedBox(height: 15),
-                const Text('Jenis Kelamin'),
-                TextField(controller: jenisKelaminController),
-                const Text('Username'),
-                TextField(controller: usernameController),
-                const SizedBox(height: 15),
-                const Text('Password'),
-                TextField(controller: passwordController),
-                const SizedBox(height: 15),
-                ElevatedButton(
-                  
-                  onPressed: () async {
-                    await databaseInstance.insertDataMemberCard({
-                      'name': nameController.text,
-                      'alamat': alamatController.text,
-                      'tanggal_lahir': tanggalLahirController.text,
-                      'jenis_kelamin': jenisKelaminController.text,
-                      'username': usernameController.text,
-                      'password': passwordController.text,
-                    });
-                    if (databaseInstance.isUsernameTaken) {
-                      Fluttertoast.showToast(
-                          msg: 'Username is already taken',
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          timeInSecForIosWeb: 2,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0);
-                    } else {
-                      Fluttertoast.showToast(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Nama'),
+              TextField(controller: nameController),
+              const SizedBox(height: 15),
+              const Text('Alamat'),
+              TextField(controller: alamatController),
+              const Text('Tanggal Lahir'),
+              TextField(controller: tanggalLahirController),
+              const SizedBox(height: 15),
+              const Text('Jenis Kelamin'),
+              TextField(controller: jenisKelaminController),
+              const Text('Username'),
+              TextField(controller: usernameController),
+              const SizedBox(height: 15),
+              const Text('Password'),
+              TextField(controller: passwordController),
+              const SizedBox(height: 15),
+              ElevatedButton(
+                onPressed: () async {
+                  await databaseInstance.insertDataMemberCard({
+                    'name': nameController.text,
+                    'alamat': alamatController.text,
+                    'tanggal_lahir': tanggalLahirController.text,
+                    'jenis_kelamin': jenisKelaminController.text,
+                    'username': usernameController.text,
+                    'password': passwordController.text,
+                  });
+                  if (databaseInstance.isUsernameTaken) {
+                    Fluttertoast.showToast(
+                        msg: 'Username is already taken',
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 2,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  } else {
+                    Fluttertoast.showToast(
                         msg: 'Create member success',
-                        backgroundColor: Colors.green
-                      );
-                      Navigator.pop(context);
-                    }
-                  },
-                  
-                  child: const Text('Simpan'),
-
-                )
-              ],
-            ),
+                        backgroundColor: Colors.green);
+                    Navigator.pop(context);
+                  }
+                },
+                child: const Text('Simpan'),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.green),
+                ),
+              )
+            ],
           ),
         ),
       ),
